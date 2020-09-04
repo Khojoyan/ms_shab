@@ -1,0 +1,194 @@
+\section{Лекция19.04.2019}
+\begin{remark}[План вычисления УМО]
+    \par~
+    \begin{enumerate}
+        \item Находим совместную плотность \(\p{X, Y}{x, y}\).
+        \item Находим условную плотность \(\p{X | Y}{x | y}\).
+        \item Вычисляем интеграл \(\E{g(X) | Y = y} = \int_\R g(x) \p{X | Y}{x | y} \diff x = \phi(y)\)
+        \item Полагаем \(\E{g(X) | Y} = \phi(Y)\)
+    \end{enumerate}
+\end{remark}
+
+\begin{example}
+    Пусть \(X, Y\) независимые \(Exp(1)\). Вычисляем \(\E{X^2 | X + Y}\).
+\end{example}
+\begin{proof}
+    По схеме:
+    \begin{enumerate}
+        \item Найдем совместную плотность.
+            \begin{multline*}
+                \Pr{(X, X + Y) \in B} = \iint_{(x, y): (x, x + y) \in B} e^{-x} e^{-y} \I{x > 0} \I{y > 0} \diff x \diff y = \\ 
+            = \set{u = x, v = x + y, J = \begin{vmatrix}
+                    1 & 0 \\ -1 & 1
+            \end{vmatrix} = 1} = \\
+            = \iint_{(u, v) \in B} e^{-v} \I{u > 0, v - u > 0} \diff u \diff v.
+            \end{multline*}
+            Отсюда \(\p{X, X + Y}{u, v} = e^{-v} \I{u > 0, v - u > 0}\).
+
+        \item Плотность \(X + Y\):
+            \begin{displaymath}
+                \p{X + Y}{v} = \int_\R \p{X, X + Y}{u, v} \diff u = e^{-v} \I{v > 0} \int_0^v \diff u = v e^{-v} \I{v > 0}.
+            \end{displaymath}
+        Следовательно,
+        \begin{displaymath}
+            \p{X | X + Y}{u | v} = \frac1v \I{0 < u < v}.
+        \end{displaymath}
+
+        \item Вычисляем УМО:
+            \begin{displaymath}
+                \E{X^2 | X + Y = v} = \int_\R u^2 \p{X | X + Y}{u | v} = \int_0^v u^2 \frac1v \diff u = \frac{v^3}{3}.
+            \end{displaymath}
+
+        \item Итак:
+        \begin{displaymath}
+            \E{X^2 | X + Y} = \frac{(X + Y)^3}{3}.
+        \end{displaymath}
+    \end{enumerate}
+\end{proof}
+
+\begin{lemma}
+    Пусть \(X, Y\) --- независимые случайные величины. Тогда
+    \begin{displaymath}
+        \E{f(X, Y) | Y = y} = \set{\text{неформально } \E{f(X, y) | Y = y}} = \E{f(X, y)}.
+    \end{displaymath}
+\end{lemma}
+
+\begin{proof}
+    Все, что надо показать, это то, что правая часть \(\E{f(X, y)}\) подходит.
+    \begin{enumerate}
+        \item Это борелевская функция от \(y\).
+        \item  тогда для \(\forall B \in B(\R)\)
+            \begin{multline*}
+                \E{f(X, Y) \I{Y \in B}} = \set{\text{пусть } X, Y \text{ имеют плотность }} = \\
+                    \iint_{\R^2} f(x, y) \I{y \in B} g(x, y) \diff x \diff y = \\ =
+                    \int_B \left(\int_\R f(x, y) g(x, y) \diff x\right) \diff y = \\ =
+                    \int_B \left(\int_\R f(x, y) \p{X}{x} \diff x\right) \p{Y}{y} \diff y = \\ =
+                    \int_B \E{f(x, y)} \p{Y}y \diff y = \\ = \set{h(y) \overset{def}= \E{f(X, y)}} =
+                    \E{h(Y) \I{Y \in B}}.
+            \end{multline*}
+    \end{enumerate}
+\end{proof}
+
+\begin{proof}
+    \(X, Y\) независимые, \(X \sim U(0, 1), Y \sim Exp(1)\). \(E(e^{xy} | Y) = ?\).
+\end{proof}
+
+\begin{proof}
+    \begin{displaymath}
+        \E{e^{XY} | Y = y} = \E{e^{yX}} = \int_0^1 e^{xy} \diff x = \frac1y \left(e^y - 1\right).
+    \end{displaymath}
+    Следовательно, \(\E{e^{XY} | Y} = \frac1Y \left(e^Y - 1\right)\).
+\end{proof}
+
+\subsection{Байесовские оценки}
+Пусть \(X_1, \ldots, X_n\) --- выборка (\(X\) --- наблюдение) из неизвестного распределение \(P \in \set{P_\theta, \theta \in \Theta}\). Пусть \(Q\) --- распределение вероятностей на \(\Theta\). Задача --- найти оценку \(\widehat{\theta}\) такую, что она минимизирует усредненную функцию риска. Для наших целей хочется квадратичную (теорема о квадратичном подходе).
+    \begin{displaymath}
+        \E_Q {\E_\theta{(\widehat{\theta} - \theta)^2}} = \min_{\theta^* x} \E_Q{\E_\theta{(\theta^* - \theta)^2}}
+    \end{displaymath}
+
+    Пусть \(Q\) имеет плотность (обобщенную) \(q(t)\), семейство \(\set{p_\theta, \theta \in \Theta}\) также имеет плотность \(\p{\theta}{x}\).
+
+    \begin{definition}
+        \(q(t)\) --- априорная плотность параметра \(\theta\).
+    \end{definition}
+
+    \begin{remark}
+        Далее считаем, что \(q(t)\) и \(P_\theta(x)\) --- абсолютно непрерывное распределение.
+    \end{remark}
+
+    \begin{definition}
+        \begin{displaymath}
+            q(t | x) = \frac{q(t) \p{t}x}{\int_\Theta q(s) \p{s}x \diff s}
+        \end{displaymath}
+        есть апостериорная плотность параметра \(\theta\).
+    \end{definition}
+
+    \begin{definition}
+        Байесовской оценкой \(\theta\) называется
+        \begin{displaymath}
+            \widehat{\theta}_Q(X) = \int_Q t q(t | X) \diff t.
+        \end{displaymath}
+    \end{definition}
+
+    Байесовская оценка --- УМО:
+    \(\p{\theta}x\) --- плотность \(x | \theta\), \(q(t | x)\) --- плотность параметра относительно \(x\).
+    % Диктофон около 17 минут.
+
+    \(q\) похожа на формулу Байеса.
+        \begin{displaymath}
+            q(t | x) = \frac{q(t) \p{t}x}{\int_\Theta q(s) \p{s}x \diff s}, \quad
+            \Pr(B_j | A) = \frac{\Pr{A | B_j} \Pr{B_j}}{\sum \ldots}.
+        \end{displaymath}
+
+
+    \begin{theorem}[О байесовской оценке]
+        Байесовская оценка --- наилучшая оценка в байесовском подходе с квадратичной функцией потерь и априорным распределением \(Q\).
+    \end{theorem}
+    \begin{proof}
+        Пусть \(X\) принимает значения в \(\mathfrak{X}\). Рассмотрим случайный вектор \(\left(\widehat{\theta}, X\right)\), имеющий совместную плотность \(q(t) \p{t}{x} = f(t, x)\) на \(\Theta \times \mathfrak{X}\). Тогда
+        \begin{displaymath}
+            \int_\Theta q(s) \p{s}x \theta s
+        \end{displaymath}
+        --- плотность \(X\),
+        % ТУТ E и половина \(\theta\) С ВОЛНОЙ!
+        а \(q(t | x)\) --- условная плотность \(\widehat(\theta)\) относительно \(X\). Следовательно, \(\hat{\theta}_Q (x) = \widehat{E} (\widehat{\theta} | X)\). По теореме о наилучшем квадратичном прогнозе, \(\hat{\theta}_Q(x)\) минимизирует
+        \begin{multline*}
+            \widehat{E} \left(\widehat{\theta} - g(x)\right)^2 = \iint_{\Theta \times \mathfrak{X}} (t - g(x))^2 = \\ =
+            \iint_{\Theta \times \mathfrak{X}} (t - g(x))^2 q(t) \p{t}{x} \diff t \diff x = \\ =
+            \int_\Theta \left(\int_\mathfrak{X} (g(x) - t)^2 \p{t}x \diff x\right) q(t) \diff t = \\ =
+            \int_\Theta E_t (g(x) - t)^2 q(t) \diff t = E_Q E_\theta (g(x) - \theta)^2.
+        \end{multline*}
+        Следовательно, баейсовская оценка наилучшая.
+    \end{proof}
+
+    \begin{example}
+        \(X_1, \ldots, X_n \sim N(0, 1)\). Найти байесовскую оценку для априорного распределения \(Q\), где:
+        \begin{itemize}
+            \item \(Q = N(\alpha, \beta^2)\)
+            \item \(Q\) --- равномерное распределение \(U(0, 1)\).
+        \end{itemize}
+    \end{example}
+
+    % FIXME
+    \begin{proof}
+        По пунктам:
+        \begin{itemize}
+            \item Найдем плотности:
+                \begin{gather*}
+                    \p{t}{X_1 \ldots X_n} = \prod_{i = 1}^n \p{t}{X_i} = \left(\frac{1}{\sqrt{2 \pi}}\right)^n \exp{-\sum_{i = 1}^n \frac{(X_i - t)^2}{2}} \\
+                    q(t) = \frac{1}{\sqrt{2 \pi \beta^2}} \exp{-\frac12 \frac{(t - \alpha)^2}{\beta^2}}.
+                \end{gather*}
+                *Двойственные распределения.
+
+                Отсюда:
+                \begin{displaymath}
+                \p{t}{X_1, \ldots ,X_n} q(t) = \left(\frac{1}{\sqrt{2 \pi}}\right) \frac{1}{\beta} \exp{-\frac12 \left(\sum (X_i - t)^2 + \frac{(t - \alpha)^2}{\beta^2}\right)}.
+                \end{displaymath}
+                \begin{gather*}
+                    nt^2 + \frac{t^2}{\beta^2} = \left(n + \frac{1}{\beta^2} \right) t^2 \\
+                    -2 \sum X_i - t - \frac{2 \alpha}{\beta^2} t \\
+                    t^2 \left(n + \frac1{\beta^2} - 2 \left(\sum X_i + \frac{\alpha}{\beta}\right)\right)t + \ldots
+                    = \left(n + \frac1{\beta^2}\right) \left(t - \frac{\sum X_i + \frac{\alpha}{\beta^2}}{n + \frac1{\beta^2}}\right) + \ldots
+                \end{gather*}
+
+                Отсюда \(q(t | X)\) --- апостериорная плотность \(\theta\) есть плотность
+                \begin{displaymath}
+                    W \left(\frac{\sum X_i + \frac{\alpha}{\beta^2}}{n + \frac{1}{\beta^2}}, \frac{1}{n + \frac1{\beta^2}}\right)
+                \end{displaymath}
+                Отсюда
+                \begin{displaymath}
+                    \widehat{\theta}_Q(X) = \frac{\sum X_i + \frac{\alpha}{\beta^2}}{n + \frac1{\beta^2}}.
+                \end{displaymath}
+
+            \item Опять
+                \begin{displaymath}
+                    \p{t}{X_1, \ldots ,X_n} q(t) = \left(\frac{1}{\sqrt{2 \pi}}\right) \frac{1}{\beta} \exp{-\frac12 \left(\sum (X_i - t)^2 + \frac{(t - \alpha)^2}{\beta^2}\right)}.
+                \end{displaymath}
+                \begin{gather*}
+                    q(t) \p{t}{X_1 \ldots X_n} = \frac12 \p{t}{X_1 \ldots X_n} \I{t \in \set{0, 1}} \\
+                    \sum_{t = 0}^1 q(t) \p{t}{X_1 \ldots X_n} = \frac12 \p{0}{X_1 \ldots X_n} + \frac12 \p{1}{X_1 \ldots X_n} \\
+                    \widehat{\theta}_Q(x) = \sum_{t = 0}^1 \frac{\frac12 \p{t}{X_1 \ldots X_n}}{\frac12 \p{t}{X_1 \ldots X_n}}= \frac{\p{1}{X_1 \ldots X_n}}{\p{0}{X_1 \ldots X_1}} = \\ =
+                    \frac{\left(\frac{1}{\sqrt{2 \pi}}\right) \exp{-\frac12 \left(\sum X_i^2 - 2 \sum X_i + n\right)}}{\left(\frac{1}{\sqrt{2 \pi}}\right) \exp{-\frac12 \left(\sum X_i^2 - 2 \sum X_i + n\right) + \left(\frac{1}{\sqrt{2\pi}} \exp{-\frac12 \sum X_i^2}\right)}} = \frac{1}{1 + \exp{\frac12 (n - 2 \sum X_i)}}.
+                \end{gather*}
+        \end{itemize}
+    \end{proof}

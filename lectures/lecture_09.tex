@@ -1,0 +1,208 @@
+\section{Лекция 26.04.19}
+\subsection{Доверительные интервалы}
+
+Мы занимались точечным оцениванием: параметру сопостатвляли некоторую оценку (точку). Другой возможный подход --- можно ли указать \(\epsilon\) такой, что наша оценка с большой вероятностью (0.99) в \(\epsilon\)-окрестности параматра:
+\begin{displaymath}
+    Pr_{\theta}\left(\left(\abs{\widehat{\theta} - \theta} \leq \epsilon\right) \geq 0.99\right)
+\end{displaymath}
+Более общая постановка вопроса: указать интервал, накрывающий наш параметр \(\theta\) с большой вероятностью независимо от истинного значения параметра.
+\begin{definition}
+    Пусть \(X\) --- наблюдение с неизвестным распрпделением \(P\), лежащим в \(P_\theta\), \(\Theta \subseteq \R\). Тогда пара статистик \(T_1(X), T_2(X)\) называется доверительным интервалом уровня доверия \(\gamma\), если \(\forall \theta \in \Theta \Pr_\theta\left(\theta \in [T_1(X), T_2(X)]\right) \geq \gamma\). Доверительный интервал точный, если \(\forall \theta \Pr_\theta(\theta \in [T_1(X), T_2(X)]) = \gamma\).
+\end{definition}
+Неформально, уровень доверия отражает нашу готовность мириться с ошибками. Для заданного \(\gamma\) интервал надо выбирать наименьшей возможной длины. В идеале --- чтобы длина стремилась к 0 с ростом выборки (числа наблюдений).
+
+Если параметр многомерный, то можно строить доверительные интервалы для его отдельных компонент или рассматривать доверительную область.
+\begin{definition}[Доверительная область]
+    \(S(X) \subseteq \Theta \subseteq \R^k\) называется доверительной областью уровня доверия \(\gamma\) для параметра \(\theta\), если
+    \begin{displaymath}
+        \forall \theta \in \Theta \Pr_\theta \left(\theta \in S(X)\right) \geq \gamma
+    \end{displaymath}
+\end{definition}
+В общем случае, доверительные интервалы строить очень трудно, надо знать распредление \(\widehat{\theta}\). Плюс \(\epsilon\) должен не зависеть от параметра. Когда это можно сделать?
+
+\subsubsection{Метод центральной статистики}
+Пусть если функция \(G(X, \theta) \mapsto \R\) такая, что ее распределение известно и не зависит от параметра \(\theta\).
+Например, \(X \sim N(\theta, 1)\), то тогда \(\theta\) --- параметр сдвига; \(X - \theta\) --- не зависит от \(\theta\). Если \(X \sim U(0, \theta)\), то делим на \(\theta\) --- получаем \(U(0, 1)\). Тогда \(G(X, \theta)\) называется \textit{центральной статистикой}.
+
+Пусть \(\gamma_2 - \gamma_1 = \gamma\), \(\gamma_i \in (0, 1)\), \(g_1, g_2\) --- квантили распределения \(G(X, \theta)\). Соответственно, \(g_i\) --- \(\gamma_i\)-квантиль.
+\begin{remark}
+    Множество \(S(X) = \set{\theta: g_1 < G(x, \theta) \leq g_2}\) является доверительной областью для параматра \(\theta\) уровня доверия \(\gamma\).
+\end{remark}
+\begin{proof}
+    \begin{displaymath}
+        \Pr{\theta \in S(X)} = \Pr{g_1 \leq G(X, \theta) \leq g_2} = \gamma_2 - \gamma_1 = \gamma.
+    \end{displaymath}
+\end{proof}
+Идея: находим центральную статистику, квантили, считаем.
+
+Если распредление \(G(X, \theta)\) непрерывно, то есть можем подобрать ровно \(\gamma\), сама \(G(X, \theta)\) монотонно и непрерывно зависит от параметра, то \(S(X)\) --- некоторый интервал.
+
+\begin{example}
+    \(X_i \sim U(0, \theta)\), \(\theta > 0\). Построить доверительный интервал уровня доверия \(\gamma\) с помощью статистики \(X_{(n)}\) (максимум).
+\end{example}
+\begin{proof}
+    \(\frac{X_i}{\theta} \sim U(0, 1)\).
+    \begin{displaymath}
+        \Pr_\theta \left(\frac{X_i}{\theta} \leq x\right) = x^n.
+    \end{displaymath}
+    Возьмем \(\gamma_i = \frac{1 \pm \gamma}{2}\). \(g_i = \gamma_i^{\frac1n}\)
+    \begin{displaymath}
+        \Pr_\theta \left(\gamma_1^{\frac1n} \leq \frac{X_{(n)}}{\theta} \leq \gamma_2^{\frac1n}\right).
+    \end{displaymath}
+    Отсюда доверительный интервал
+    \begin{displaymath}
+        \frac{X_{(n)}}{\gamma_1^{\frac1n}} \leq \theta \leq \frac{X_{(n)}}{\gamma_2^{\frac1n}}.
+    \end{displaymath}
+    Длина интервала --- \(\frac{1}{\gamma_2^{\frac1n}} - \frac{1}{\gamma_1^{\frac1n}} \sim 1 - \left(\frac{\gamma_1}{\gamma_2}\right)^{\frac1n}\).
+    \begin{displaymath}
+        \frac{\gamma_1}{\gamma_2} = \frac{1 - \gamma}{1 + \gamma} = 1 - \frac{2\gamma}{1 + \gamma} \sim \set{\text{по Тейлору}} \sim \frac{2 \gamma}{1 + \gamma} \frac{1}{n} = \obig\left(\frac1n\right).
+    \end{displaymath}
+
+    Можно было взять \(\gamma_2 = 1\), \(\gamma_1 = (1 - \gamma)^{\frac1n}\). Тогда длина интервала получилась бы \(\frac{\gamma}{n}\). Если \(\gamma\) почти единица, то случаи не очень различаются.
+\end{proof}
+
+\begin{example}[Плохое распредление]
+    \(X_i \in Bin(1, \theta)\). Непонятно, что делать вообще.
+\end{example}
+
+Считаем приближенно: вероятность из утверждения 1 не точно равна, а близка к \(\gamma\).
+
+Строятся асимптотические доверительные интервалы.
+
+\begin{definition}
+    \(X = (X_1 \ldots X_n)\) --- выборка растущего размера \(n\). Последовательность пар статистик \(T^1_n(X), T^2_n(X), \ldots\) --- асимптотический доверительный интервал уровня доверия \(\gamma\) для параметра \(\theta\), если \(\forall \theta \in \Theta\)
+    \begin{displaymath}
+        \liminf_{n \to \infty} \Pr_\theta\left(T_n^1(X) \leq \theta \leq T_n^2(X)\right) \geq \gamma.
+    \end{displaymath}
+\end{definition}
+\begin{definition}
+    Если \(\forall \theta\) существует предел, равный \(\gamma\), то асимптотический доверительный интервал называется точным.
+\end{definition}
+
+\subsubsection{Метод построений асимтп. дов. инт}
+Пусть \(\widehat{\theta}_n\) --- асимтп. норм. оценка \(\theta\) с асимптотической дисперсией \(\sigma^2(\theta)\):
+\begin{displaymath}
+    \sqrt{n} \left(\widehat{\theta}_n(X) - \theta\right) \overset{d_\theta}{\to} N(0, \sigma^2).
+\end{displaymath}
+Делим на \(\sigma:\)
+\begin{displaymath}
+    \frac{\sqrt{n}}{\sigma(\theta)} \left(\widehat{\theta}_n(X) - \theta\right) \overset{d_\theta}{\to} N(0, 1).
+\end{displaymath}
+\(\sigma\) зависит от \(\theta\); неприятно. Если \(\sigma\) <<просто>> зависит от \(\theta\), то есть можно решить неравенство
+\begin{displaymath}
+\abs{\sqrt{n} \frac{\widehat{\theta}_n - \theta}{\sigma(\theta)}} \leq u,
+\end{displaymath}
+то все хорошо: берем квантили и решаем. Иначе находим состоятельную оценку \(\sigma(\theta)\): выборочная дисперсия, если \(\sigma\) --- честная дисперсия.
+Если \(\sigma\) непрерывна, то берем \(\sigma(\widehat{\theta}_n) \to \sigma(\theta)\), или еще какая-то другая оценка \(\widehat{\sigma}^2\).
+Если мы нашли оценку, то тогда в силу леммы Слуцкого
+\begin{displaymath}
+    \sqrt{n} \frac{\widehat{\theta}_n - \theta}{\widehat{\sigma}(x)} \to N(0, 1).
+\end{displaymath}
+Берем \(u_1, u_2\) --- квантили стандартного нормального такие, что \(\xi \sim N(0, 1)\) лежит в \((u_1, u_2)\) с вероятностью \(\gamma\). Тогда
+\begin{displaymath}
+    \Pr_\theta \left(u_1 \leq \sqrt{n} ... \leq u_2\right) \to \gamma,
+\end{displaymath}
+откуда
+\begin{displaymath}
+    \widehat{\theta}_n - \frac{\widehat{\sigma} u_1 }{\sqrt{n}} \leq \theta \leq ...
+\end{displaymath}
+Длина --- \((u_2 - u_1) \frac{\widehat{\sigma}}{\sqrt{n}}\).
+\(u_1, u_2\) надо выбрать симметричными: \(1 - \frac{\gamma}{2}\), \(1 + \frac{\gamma}{2}\)-квантили, это минимизирует длину интервала.
+Минимизация \(\widehat\sigma\) --- ОМП, у нее наименьшая асимптотическая дисперсия.
+
+\begin{remark}
+    Как быстро сходится --- непонятно. Скорее всего не быстрее, чем \(\frac1{\sqrt{n}}\).
+\end{remark}
+
+\begin{example}
+    \(X \in Bin(1, \theta)\). Строим асимптотический доверительный интервал уровня доверия \(\gamma\).
+\end{example}
+\begin{proof}
+    Берем \(\overline{X}\) --- ОМП.
+    \begin{displaymath}
+        \sqrt{n} \left(\overline{X} - \theta\right) \to N(0, D_\theta X_1).
+    \end{displaymath}
+    \(S^2\) --- выборочная дисперсия, сходится к настоящей.
+    Получаем
+    \begin{displaymath}
+        \sqrt{n}\frac{\overline{X} - \theta}{S} \to N(0, 1).
+    \end{displaymath}
+    \(u = 1 + \frac{\gamma}{2}\)-квантиль \(N(0, 1)\)
+    \begin{displaymath}
+        \overline{X} - \frac{u S}{\sqrt{n}} \leq \theta \leq \overline{X} + \frac{u S}{\sqrt{n}}.
+    \end{displaymath}
+\end{proof}
+
+\subsection{Линейная регрессионная модель}
+Модель, в которой строятся хорошоние асимтотические оценки.
+
+Есть наблюдение \(X \in \R^n\), представляемый в виде \(X = l + \epsilon\), где \(l\) --- неслучайный неизвестный вектор (стратегически как измеряемое), а \(\epsilon\) --- случайный вектор с нулевым средним, а матрица ковариаций --- \(\sigma^2 E_n\) (вектор ошибок измерения).
+
+При этом, про \(l\) известно, что \(l \in L\) --- линейной подпространство в \(\R^n\), \(\dim L < n\). Задача --- оценить \(l, \sigma^2\).
+
+\begin{example}
+    Летит ракета. Замеряем положения \(X_i\) в моменты времени \(t_i\). Получается
+    \begin{displaymath}
+        X_i = a t^2_i + b t_i + c + \epsilon_i.
+    \end{displaymath}
+    Проводим \(n\) измерений. Тогда
+    \begin{displaymath}
+        l = \begin{pmatrix}
+            a t_1^2 + b t_1 + c_1 \\
+            a t_2^2 + b t_2 + c_2 \\
+            \vdots \\
+            a t_n^2 + b t_n + c_n \\
+        \end{pmatrix}
+    \end{displaymath}
+\end{example}
+\begin{example}
+    Нечестная модель: сразу подгоняем под модель. Вычисляем зарплату: \(a \cdot \text{цвет волос} + b \cdot \text{образование} + c \cdot \text{рост}\). Подгоняем под ЛРМ.
+\end{example}
+
+Надо осознать, что есть \(l\). \(L\) известно. Пусть в \(L\) известен базис \(Z_1, \ldots, Z_k\). Тогда \(l = Z_1 \theta_1 + \ldots + Z_k \theta k,\) где \(\theta_1, \ldots, \theta_k\) --- неизвестные координаты \(l\) в базисе \(Z_1, \ldots, Z_k\).
+Составим матриуцу \(Z = (Z_1, \ldots, Z_k)\); \(\theta = (\theta_1, \ldots, \theta_k)^T\). \(X = Z \theta + \epsilon\). Матрица \(Z\) --- регрессионная матрица.
+
+Задача --- оценить \(\theta\), \(\sigma^2\).
+
+\subsubsection{Метод наименьших квадратов}
+\begin{definition}
+    Оценкой \(\theta\) по МНК (ОНК) называется \(\widehat\theta(X)\), при котором достигается минимум \(\abs{X - Z \theta}^2,\) \(\theta \in \R^k\)..
+\end{definition}
+
+\textit{Геометрический смысл} МНК --- проекция \(X\) на \(L\).
+
+\begin{remark}
+    \begin{displaymath}
+        \widehat\theta(X) = (Z^T Z)^{-1} Z^T X.
+    \end{displaymath}
+    \(Z^T Z\) обратима, так как \(Z\) составлена из базисных векторов.
+\end{remark}
+\begin{proof}
+    \(X = Z \widehat\theta(X)\) ортогонально \(L\): \(\forall \theta \in \R^k\)
+    \begin{displaymath}
+        \langle X - Z\widehat \theta(X), Z \theta\rangle = 0
+    \end{displaymath}
+
+    \begin{displaymath}
+        Z^T (X - Z \widehat\theta (X)) \theta = 0 \quad \forall \theta \in \R^k.
+    \end{displaymath}
+    Отсюда матрица равна 0, и 
+    \begin{displaymath}
+        \widehat\theta(X) = (Z^T Z)^{-1} Z^T X.
+    \end{displaymath}
+\end{proof}
+
+\begin{remark}
+    \(\E{\widehat\theta(X)} = \theta\).
+    \(\D{\widehat\theta(X)} = \sigma^2 (Z^T Z)^{-1}\)
+\end{remark}
+\begin{proof}
+    \begin{displaymath}
+        \E{\widehat\theta(X)} = \E{(Z^T Z)^{-1} Z^T X} = (Z^T Z)^{-1} \E{X} = (Z^T Z)^{-1} (Z^T Z) \theta = \theta.
+    \end{displaymath}
+    \begin{displaymath}
+        \D{\widehat\theta(X)} = \D{(Z^T Z)^{-1} Z^T X} = (Z^T Z)^{-1} Z^T \D{X} Z(Z^T Z)^{-1} = \sigma^2 (Z^T Z)^{-1} Z^T Z (Z^T Z)^{-1} = \sigma^2 (Z^T Z)^{-1}.
+    \end{displaymath}
+\end{proof}
+
+Гауссовская регрессия --- вектор \(\epsilon\) --- гауссовский.

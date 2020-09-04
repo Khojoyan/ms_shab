@@ -1,0 +1,233 @@
+\section{Лекция 27.05.19}
+
+\subsection{Проверяем гипотезы}
+
+% \mathcal вообще круглый
+% FIXME: Pr
+Есть наблюдение \(X\) с неизвестным распределением \(P \in \mathcal{P}\), и мы хотим проверить гипотезу \(H_0: P \in \mathcal{P}_0\) (против альтернативной гипотезы \(H_1: P \in \mathcal{P}_1\))
+
+\begin{definition}
+    Пусть \(\mathcal{X}\) --- множество значений \(X\) (выборочное пространство) и \(S \subseteq \mathcal{X}\). Если правило принятия \(H_0\) выглядит так:
+    \begin{displaymath}
+        H_0 \text{ отвергается } \iff X \in S,
+    \end{displaymath}
+    то \(S\) называется \textit{критерием} для проверки гипотезы \(H_0\) (против альтернативы \(H_1\)).
+    \(S\) --- критическое множество, \(\mathcal{X} \setminus S\) --- область принятия гипотезы.
+\end{definition}
+
+Хотим избежать ошибок, но это невозможно, потому что все случайно; значит, хотим минимизировать число ошибок.
+
+Виды ошибок:
+\begin{enumerate}
+    \item Ошибка первого рода --- \(H_0\) отвергли (\(X \in S\)), когда она была верна (\(P \in \mathcal{P}_0\)).
+    \item Ошибка второго рода --- \(H_0\) приняли (\(X \notin S\)), когда она была не верна (\(P \in \mathcal{P}_1\)).
+\end{enumerate}
+
+Для определения вероятности ошибок вводим функцию мощности (определяется для критерия).
+\begin{definition}[Функция мощности]
+    Функцией мощности критерия \(S\) называется функция \(\beta(Q, S) = Q(X \in S), Q \in \mathcal{P}\).
+\end{definition}
+
+(На самом деле, тут вероятность не совсем корректное слово, но нам все равно)
+
+\begin{enumerate}
+    \item Вероятность ошибки первого рода --- \(\beta(Q, S), Q \in \mathcal{P}_0\).
+    \item Вероятность ошибки второго рода --- \(1 - \beta(Q, S), Q \in \mathcal{P}_1\).
+\end{enumerate}
+
+Чего бы мы хотели от вероятностей? Стратегически --- чтобы все они были малы. Какой должен быть критерий? Он должен удовлетворять двум взаимоисключающим свойствам: на \(\mathcal{P}_0\) она должна быть малой, а на \(\mathcal{P}_1\) --- большой. Но этот баланс находится плохо: пусть \(\mathcal{P}_0\) плавно переходит в \(\mathcal{P}_1\); ясно, что функция мощности будет непрерывной, откуда функции мощности близки.
+
+\begin{definition}
+    Критерий \(S\) называется критерием уровня значимости \(\epsilon \in (0, 1)\) для проверки гипотезы \(H_0\) (может быть, с альтернативой \(H_1\)), если \(\forall Q \in \mathcal{P}_0\)
+    \begin{displaymath}
+        \beta(Q, S) \leq \varepsilon.
+    \end{displaymath}
+\end{definition}
+
+\begin{definition}
+    \textit{Размером критерия \(S\)} называют минимальный уровень значимости
+    \begin{displaymath}
+        \alpha(S) = \sup_{Q \in \mathcal{P}_0} \beta(Q, S).
+    \end{displaymath}
+\end{definition}
+
+Для критериев также вводят понятия несмещенности и состоятельности, хотя они совсем другие.
+
+\begin{definition}
+    Критерий \(S\) называется несмещенным, если 
+    \begin{displaymath}
+        \sup_{Q \in \mathcal{P}_0} \beta(Q, S) \leq \inf_{Q \in \mathcal{P}_1} \beta(Q, S).
+    \end{displaymath}
+\end{definition}
+
+\begin{definition}
+    Если \(X = \br{X_1, \ldots, X_n}\) --- выборка растущего размера, то последовательность критериев \(S_n, n \in \N\) для проверки гипотезы \(H_0: P \in \mathcal{P}_0\) против \(H_1: P \in \mathcal{P}_1\) (\(P\) --- распределение \(X_0\)) называется состоятельной при условии \(\beta(Q, S_n) \underset{n \to \infty}\to 1 ~ \forall Q\in \mathcal{P}_1\) (в пределе вероятность ошибки второго рода сходится к 0).
+\end{definition}
+
+\subsubsection{Сравниваем критерии}
+\begin{definition}
+    Пусть есть два критерия \(S, R\) одного уровня значимости \(\epsilon \in (0, 1)\). Критерий \(S\) \textit{мощнее} \(R\), если \(\forall Q \in \mathcal{P}_1 \beta(Q, S) \geq \beta(Q, R)\). (Вероятность ошибки второго рода у \(S\) равномерно меньше, чем у \(R\)).
+\end{definition}
+
+Наш критерий <<самый лучший>>, если он мощнее каждого критерия.
+\begin{definition}
+    Критерий \(S\) называется \textit{равномерно наиболее мощным критерием} (р.н.м.к.) уровня значимости \(\epsilon \in (0, 1)\) для проверки гипотезы \(H_0: P \in \mathcal{P}_0\) против \(H_1: P \in \mathcal{P}_1\), если он мощнее любого другого критерия того же уровня значимости \(\epsilon\).
+\end{definition}
+\begin{remark}
+    Обычно такого критерия нет, но есть хорошие ситуации.
+\end{remark}
+
+\subsection{Строим РНМК}
+\begin{definition}
+    Если гипотеза \(H\) состоит из одного распределения, то есть \(H: P = P_0\), то она называется \textit{простой}.
+\end{definition}
+
+Хотим различить простые гипотезы.
+
+\begin{example}
+    \(X = \br{X_1, \ldots, X_n}\) --- выборка;
+    \begin{align*}
+        H_0 &: P = \mathrm{Pois}(1) \\
+        H_1 &: P = \mathrm{Exp}(1) \\
+    \end{align*}
+    Тогда критерий \(S = X \neq \Z_+^n\) --- критерий с вероятностями ошибки 0.
+\end{example}
+
+Пусть \(H_0: P = P_0, H_1: P = P_1\) --- простые гипотезы, пусть \(P_0\) и \(P_1\) относятся к одном классу (два абсолютно непрерывных или два дискретных, для простоты на \(\Z\)) и пусть \(p_0(x)\) и \(p_1(x)\) --- обобщенные плотности \(P_0\) и \(P_1\). Для положительного \(\lambda > 0\) определим критерий \(S(\lambda) = \set{x : p_1(x) - \lambda p_0(x) \geq 0}\).
+\begin{lemma}[Нейман-Пирсон]
+    Пусть есть критерий \(R\) удовлетворяет
+    \begin{displaymath}
+        \PP[0]{X \in R} \leq \PP[0]{X \in S_\lambda}
+    \end{displaymath}
+    Тогда:
+    \begin{enumerate}
+        \item \(\PP[1]{X \in R} \leq \PP[1]{X \in S_\lambda}\)
+        \item \(\PP[0]{X \in S_\lambda} \leq \PP[1]{X \in S_\lambda}\)
+    \end{enumerate}
+\end{lemma}
+\begin{proof}
+    Докажем сначала первое неравенство. Для простоты имеем дело с абсолютно непрерывными расрпедлениеями, для дискретных докво такое же, только надо взять сумму вместо интеграла.
+
+    Заметим, что \(\forall x \in X\) выполнено
+    \begin{displaymath}
+        I_{S_\lambda}(x) \br{p_1(x) - \lambda p_0(x)} \geq
+        I_{R}(x) \br{p_1(x) - \lambda p_0(x)}
+    \end{displaymath}
+    (достаточно рассмотреть \(x \in S_\lambda\) и \(x \in S_\lambda\)).
+    Тогда проинтегрируем неравенство по всему выборочному пространству. Получаем:
+    \begin{displaymath}
+        \int_{X} I_{S_\lambda}(x) \br{p_1(x) - \lambda p_0(x)} \diff x \geq
+        \int_{X} I_{R}(x) \br{p_1(x) - \lambda p_0(x)} \diff x.
+    \end{displaymath}
+    Левая часть есть
+    \begin{displaymath}
+        \PP[1](X \in S_\lambda) - \lambda \PP[0](X \in S_\lambda)
+    \end{displaymath}
+    Правая часть есть
+    \begin{displaymath}
+        \PP[1](X \in R) - \lambda \PP[0](X \in R)
+    \end{displaymath}
+    откуда
+    \begin{multline*}
+        \PP[1](X \in S_\lambda) - \lambda \PP[0](X \in S_\lambda) \geq
+        \PP[1](X \in R) - \lambda \PP[0](X \in R) \implies \\ \implies
+        \PP[1](X \in S_\lambda) - \PP[1](X \in R) \geq
+        \lambda \PP[0](X \in S_\lambda)  - \lambda \PP[0](X \in R) \geq 0.
+    \end{multline*}
+
+    Второе неравенство. Пусть \(\lambda \geq 1\). Заметим, что \(\forall x \in S_\lambda\)
+    \begin{displaymath}
+        P_1(x) \geq \lambda p_0(x) \geq p_0(x)
+    \end{displaymath}
+    откуда
+    \begin{displaymath}
+        \PP[1]{X \in S_\lambda} \int_{S_\lambda} p_1(x) \diff x geq \int_{S_\lambda} p_0(x) \diff x = \PP[0]{X \in S_\lambda}.
+    \end{displaymath}
+    Если \(\lambda < 1\), то \(\forall x \in \overline{S_\lambda}\)
+    \begin{displaymath}
+        p_1(x) < \lambda p_0(x) \leq p_0(x) \implies
+    \end{displaymath}
+    \begin{displaymath}
+        \PP[1]{X \in \overline{S_\lambda}} = \int_{\overline{S_\lambda}} p_1(x) \diff x \leq 
+        \int_{\overline{S_\lambda}} p_0(x) \diff x = \PP[0](X \in \overline{S_\lambda}),
+    \end{displaymath}
+    откуда получаем то, что нужно.
+\end{proof}
+
+\begin{consequence}
+    Если \(\lambda > 0\) таково, что \(\PP[0]{X \in S_\lambda} = \epsilon\), то \(S_\lambda\) --- равномерно наиболее мощный критерий уровня значимости \(\epsilon\) для проверки \(H_0\) против \(H_1\).
+\end{consequence}
+
+Техническая задача --- надо решать уравнение \(\PP[0]{X \in S_\lambda} = \epsilon\) или
+\begin{displaymath}
+    \int_{x: p_1(x) - \lambda p_0(x) \geq 0} p_0(x) \diff x = \epsilon.
+\end{displaymath}
+Для непрерывного распредления \(\lambda\) находится почти всегда для \(\forall \epsilon \in (0, 1)\). В дискретном случае стоит брать только такие \(\epsilon\), что уравнение разрешимо.
+
+\begin{example}
+    Как обычно, решим что-нибудь.
+    \begin{enumerate}
+        \item Выборка \(X = (X_1, \ldots, X_n) \sim \Norm(\theta, 1)\).
+    \begin{align*}
+        H_0 &: \theta = 0 \\
+        H_1 &: \theta = 1 \\
+    \end{align*}
+
+    Хотим построить РНМК уровня значимости \(\epsilon\).
+
+    Надо решать неравенство:
+    \begin{displaymath}
+        S_\lambda = \set{p_1(x) - \lambda p_0(x) \geq 0}.
+    \end{displaymath}
+    \begin{displaymath}
+        \frac{p_1(x)}{p_0(x)} \geq \lambda.
+    \end{displaymath}
+
+    \begin{displaymath}
+        p_i(X_1, \ldots, X_n) = \prod_{j = 1}^n \left(\frac{1}{\sqrt{2\pi}}\right) e^{-\frac{(X_j - i)^2}{2}}
+    \end{displaymath}
+    \begin{multline*}
+        \frac{p_1(X_1, \ldots, X_n)}{p_0(X_1, \ldots, X_n)} =
+        \frac{
+            e^{-\frac12 \sum_{j = 1}^n (X_j - 1)^2}
+        }{
+            e^{-\frac12 \sum_{j = 1}^n X_j^2}
+        } = \\ = e^{\sum_{j = 1}^n X_j - \frac{n}{2}} \geq \lambda \iff \set{\text{логарифмируем}} \iff \\ \iff
+        \sum_{j = 1}^n X_j \geq \lambda' \iff
+        \sqrt{n} \overline{X} \geq \lambda''.
+    \end{multline*}
+
+    \begin{displaymath}
+        \PP[0]{\sqrt{n} \overline{X} \geq \lambda''} = \epsilon.
+    \end{displaymath}
+
+    \(\lambda''\) --- \((1 - \epsilon)\)-квантиль \(N(0, 1)\).
+
+    \textit{Ответ:} \(\sqrt{n} \overline{X} \geq \gamma_{1 - \epsilon}\), где \(\gamma_{1 - \epsilon}\) --- \(1 - \epsilon\)-квантиль стандартного нормального распредления.
+\item Будет ли критерий состоятельным?
+    \begin{displaymath}
+        \PP[1]{\sqrt{n} \overline{X} \geq \gamma_{1 - \epsilon}} = \PP[1]{\sqrt{n} \br{\overline{X} - 1} \geq \gamma_{1 - \epsilon}} - \sqrt{n}
+    \end{displaymath}
+    Отсюда вероятность стремится к единице при \(n \to \infty\).
+\item Схема Бернулли: \(X_1, \ldots, X_n \sim \mathrm{Bin}(1, \theta)\).
+    \begin{align*}
+        H_0 &: \theta = \theta_0 \\
+        H_1 &: \theta = \theta_1 < \theta_0 \\
+    \end{align*}
+    хотим построить РНМК уровня значимости \(\epsilon\).
+
+    Составляем отношение правдоподобия:
+    \begin{displaymath}
+        \frac{p_1(X_1, \ldots, X_n)}{p_0(X_1, \ldots, X_n)} = 
+        \frac{\theta_1^{\sum X_i} (1 - \theta_1)^{n - \sum X_i}}{\theta_0^{\sum X_i} (1 - \theta_0)^{n - \sum X_i}} = 
+        \br{\frac{\theta_1}{\theta_0} \frac{1 - \theta_0}{1 - \theta_1}}^{\sum X_i} \br{\frac{1 - \theta_1}{1 - \theta_0}}^n \geq \lambda \iff \sum X_i \leq \lambda'.
+    \end{displaymath}
+    \begin{displaymath}
+        \PP[0]{\sum X_i \leq \lambda'} = \epsilon
+    \end{displaymath}
+    \begin{displaymath}
+        \sim \mathrm{Bin}(n, \theta_0) \implies
+    \end{displaymath}
+    \(\lambda'\) --- \(\epsilon\)-квантиль \(\mathrm{Bin}(n, \theta_0)\).
+    \end{enumerate}
+\end{example}

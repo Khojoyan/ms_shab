@@ -1,0 +1,201 @@
+\section{Лекция 19.04.19}
+
+\textit{Продолжение свойств УМО}
+
+\begin{enumerate}
+    \setcounter{enumi}{8}
+    \item Предельный переход под знаком под знаком МО.
+        \begin{enumerate}
+            \item Пусть \(\xi_n > 0\), \(\xi_n \downarrow \xi\) монотонно, \(\E{\xi} < \infty\), тогда \(\E{\xi_n | \eta} \uparrow \E{\xi | \eta}\).
+            \item Если \(\xi_n \to \xi\) п.н., \(\abs{\xi_n}, \abs{\xi} < \delta,\) \(\E{\delta} < \infty\), то
+            \begin{displaymath}
+                \E{\xi_n | \eta} \overset{\text{п. н.}}\to \E{\xi | \eta}.
+            \end{displaymath}
+        \end{enumerate}
+        \begin{enumerate}
+            \item \begin{proof}
+                В силу свойства 5 (про сохранение порядка) \(\E{\xi_n | \eta} < \E{\xi_{n + 1} | \eta}\). Тогда можно рассмотреть \(\zeta = \lim_{n \to \infty} \E{\xi_n | \eta}\). Проверим, что \(\zeta = \E{\xi | \eta}\). Заметим, что \(\E{\xi_n | \eta}\) --- борелевские функции от \(\eta\), откуда \(\zeta \in B(\R)\) от \(\eta\). Проверим интегральное свойство:
+                \begin{multline*}
+                    \forall B \in B(\R) \xi_n \I{\eta \in B} \uparrow \xi \I{\eta \in B} \implies \\ \implies
+                    \set{\text{по теореме о монотонной сходимости}} \implies \\ \implies
+                    \E{\xi \I{\eta \in B}} = \lim_{n \to \infty} \E{\xi_n \I{\eta \in B}} = \\ =
+                    \set{\text{интегральное свойство}} = \\ =
+                    \lim_{n} \E{\E{\xi_n | \eta} \I{\eta \in B}} = \\ =
+                    \abs{\E{\xi_n | \eta) \I{\eta \in B} \uparrow \zeta \I{\eta \in B}}} = \\ =
+                    \set{\text{теорема о монотоннй сходимости}} = \lim_n \E{\zeta \I{\eta \in B}}.
+                \end{multline*}
+            \end{proof}
+            \item \begin{proof}
+                Рассмотрим \(\zeta_n = \sup_{m \leq n} \abs{\xi_m - \xi}\). Тогда \(\abs{\zeta_n} \leq 2\delta\) и \(\zeta_n \downarrow 0\) с вероятностью 1.
+                Тогда по пункту (a), \(\E{\zeta_n | \eta} \downarrow 0\) почти наверное.
+                Но \(\abs{\E{\xi_n | \eta} - \E{\xi | \eta}}\) в силу свойства 6 не больше \(\E{\abs{\xi_n - \xi} | \eta}\), что не больше в силу 5 \(\E{\zeta_n | \eta} \to 0\).
+            \end{proof}
+        \end{enumerate}
+
+\item Если \(\delta = f(\eta)\) --- борелевская функция, \(\E{\abs{\xi \delta}} < \infty\), \(\E{\abs{\xi}} < \infty\), то
+    \begin{displaymath}
+        \E{\xi \delta | \eta} = \delta \E{\xi | \eta}.
+    \end{displaymath}
+    \begin{proof}
+        Пусть сначала \(\delta = f(\eta)\), \(f(x) = \I{x \in A}\) --- простая функция, \(A \in B(\R)\). Тогда: правая часть есть функция от \(\eta\), осталось проверить интегральной свво.
+        \begin{multline*}
+            \E{\xi \delta \I{\eta \in B}} = \E{\xi \I{\eta \in A} \I{\eta \in B}} = \\ = \E{\xi \I{\eta \in A \cap B}} = \set{\text{интегральное свво}} = \\ = \E{\E{\xi | \eta} \I{\eta \in A \cap B}} = \E{\E{\xi | \eta} \delta \I{\eta \in B}}.
+        \end{multline*}
+
+        В силу линейности, равенство \(\E{\xi \delta | \eta} = \delta \E{\xi | \eta}\) останется верным для простых функций \(f(x) = \sum_{k = 1}^N c_k \I{x \in B_k}\), где \(c_k \in \R, B_k = B(\R)\).
+        
+        Если \(f(x)\) произвольная, то возьмем последовательность простых \(f_n(x)\): \(f_n(x) \to f(x)\) и  \(\abs{f_n(x)} \leq \abs{f(x)}\). По свойству 8,
+        \begin{displaymath}
+            \E{\xi \delta | \eta} = \lim_n \E{\xi f_n(\eta) | \eta} = \E{\xi | \eta} \lim_n f_n(\eta) = \delta \E{\xi | \eta}.
+        \end{displaymath}
+    \end{proof}
+
+\item (Неравенство Йенсена). Если \(f(x)\) -- выпуклая вниз, то
+    \begin{displaymath}
+        \E{f(\xi) | \eta} \geq f(\E{\xi | \eta}).
+    \end{displaymath}
+
+    \begin{proof}
+        Аналогично нормальному нер. Йенсена
+
+        Воспользуемся свойством 9. (Рисунок параболы; в любой точке функция лежит выше, чем прямая: \(\forall x \in \R \exists \lambda(x): \forall y \in \R f(y) \geq f(x) + \lambda(x)(y - x)\)). Положим \(y = \xi\), \(x = \E{\xi | \eta}\). Берем УМО от обеих частей:
+        \begin{displaymath}
+            \E{f(\xi) | \eta} \geq f(\E{\xi | \eta}) + \E{\lambda \E{\xi | \eta} (\xi - \E{\xi | \eta}) | \eta}.
+        \end{displaymath}
+        Последнее равно 0: \(\lambda \E{\xi | \eta}\) --- борелевская от \(\eta\); по свойству 9, последнее слагаемое равно:
+        \begin{displaymath}
+            \lambda \E{\xi | \eta} (\E{\xi | \eta} - \E{\xi | \eta}) = 0.
+        \end{displaymath}
+    \end{proof}
+
+    \item Идея: знаем \(Y\), хотим получить прогноз на \(X\) функцией \(f(Y)\). Минимизируем \(\E{X - f(Y)}^2 \to \min_f\). Ответ: УМО.
+        \begin{theorem}[О наилучшем квадратичном прогнозе]
+            Пусть у \(X\) конечный второй момент: \(\E{X^2} < \infty\). Тогда
+            \begin{displaymath}
+                \E{X - \E{X | Y}}^2 = \min_{f \in \set{\text{борелевская}}} \E{X - f(Y)}^2,
+            \end{displaymath}
+            причем минимум единственен с точностью до равенства п.н.
+        \end{theorem}
+
+        \begin{proof}
+            Пусть \(f\) произвольная борелевская.
+            \begin{multline*}
+                \E{X - f(Y)}^2 = \E{X - \E{X | Y} + \E{X | Y} - f(Y)}^2 = \\
+                = \E{X - \E{X | Y}}^2 + \E{\E{X | Y} - f(Y)}^2 + 2 \E{(X - \E{X | Y})(\E{X | Y} - f(Y))}.
+            \end{multline*}
+            Первое слагаемое хотим, второе больше 0, третье равно 0: воспользуемся формулой полной вероятности.
+            \begin{displaymath}
+                \E{(X - \E{X | Y})(\E{X | Y - f(Y)})} = \set{\text{фпв}} = \E{\E{(X - \E{X | Y}) (\E{X | Y} - f(Y)) | Y}}
+            \end{displaymath}
+            Посмотрим на \(\E{X | Y} - f(Y)\) --- функция от \(Y\). По свойству 9, выносим за УМО:
+            \begin{displaymath}
+                \E{(\E{X | Y} - f(Y)) \E{(X - \E{X | Y}) | Y}} = \set{\text{по линейности}} = \E{X | Y} - \E{X | Y} = 0.
+            \end{displaymath}
+            Тем самым, минимум достигается тогда и только тогда \(f(Y) = \E{X | Y}\) с вероятностью 1.
+        \end{proof}
+
+        \begin{remark}
+            Эта теорема будет фундаментом построения байесовских оценок.
+        \end{remark}
+\end{enumerate}
+
+\subsection{Условное распределение}
+
+Как считать УМО? Если \(Y\) дискретная св, то
+\begin{displaymath}
+    \E{X | Y} = \sum_{y} \frac{\E{x \I{Y = y}}}{\Pr{Y = y}} \I{Y = y}.
+\end{displaymath}
+Хотим обобщить на непрерывные \(Y\). Естественно обобщить:
+    \begin{displaymath}
+        \E{X | Y = y} \overset{def}= \frac{\E{X \I{Y = y}}}{\Pr{Y = y}} = \phi(y).
+    \end{displaymath}
+Заметим, что \(\E{X | Y} = \phi(Y) \iff \E{X | Y = y} = \phi(y)\).
+\begin{definition}[Условное математическое ожидаение \(\E{X | Y = y}\)]
+    \(\E{X | Y = y}\) --- борелевская функция \(\phi(y)\) такая, что \(\forall B \in B(\R)\)
+    \begin{displaymath}
+        \E{X \I{Y \in B}} = \E{\phi(X) \I{Y \in B}}.
+    \end{displaymath}
+\end{definition}
+
+\begin{remark}
+    \(\E{X | Y} = \phi(Y) \iff \E{X | Y = y} = \phi(y)\)
+\end{remark}
+
+\begin{definition}[Условное распределение]
+    Условным распределением \(X\) при условии \(Y = y\) называется
+    \begin{displaymath}
+        \Pr{X \in B | Y = y} \overset{def}= \E{\I{X \in B} | Y = y},
+    \end{displaymath}
+    рассматриваемая как функция от \(B \in B(\R)\).
+\end{definition}
+
+\begin{enumerate}
+    \item Для \(\forall B \in B(\R)\) \(P{X \in B | Y = y}\) есть борелевская функция от \(y\).
+    \item Для \(\forall y \in R\) \(\Pr{x \in B | Y = y}\) есть вероятностная мера на \((\R, B(\R))\).
+    \item Если \(Y\) имеет плотность \(\p{Y}{y}\), то
+        \begin{displaymath}
+            \Pr{X \in B, Y \in A} = \int_{A} \Pr{x \in B | Y = y} \p{Y}{y} \diff y.
+        \end{displaymath}
+\end{enumerate}
+
+Пункты 1 и 3 понятны, 2 не будем доказывать.
+
+\begin{theorem}[Условное распределение существует]
+    Условное распределение существует.
+\end{theorem}
+
+\begin{definition}[Условная плотность]
+    Если условное распределение \(\Pr{X \in B | Y = y}\) имеет плотность, то есть
+    \begin{displaymath}
+        \Pr{X \in B | Y = y} = \int_{B} \p{X | Y}{x | y} \diff x,
+    \end{displaymath}
+    то \(\p{X | Y}(x | y)\) называется условной плотностью \(X\) относительно \(Y\).
+\end{definition}
+
+\begin{remark}
+    Условная плотность нужна для вычисления УМО, как и обычная плотность для обычного МО.
+\end{remark}
+
+\begin{theorem}[О вычислении УМО]
+    Если существует условная плотность \(\p{X | Y}{x | y}\), то для любой борелевской функции \(g(x)\) выполнено:
+    \begin{displaymath}
+        \E{g(X) | Y = y} = \int_\R g(x) \p{X | Y}{x | y} \diff x.
+    \end{displaymath}
+\end{theorem}
+
+\begin{proof}
+    Для УМО \(\E{\xi | \eta = y}\) выполнены свойства обычного УМО: линейность, сохранение отношения порядка, теорема о предельном переходе и так далее.
+
+    Пусть сначала \(g(x)\) индикатор \(g(x) = \I{x \in A}\), \(A \in B(\R)\). Тогда:
+    \begin{multline*}
+        \E{g(X) | Y = y} = \E{\I{X \in A} | Y = y} = \Pr{X \in A | Y = y} = \\ = \set{\text{определение условной плотности}} = \int_A \p{X | Y}{x | y} \diff x = \\ = \int_\R \I{x \in A} \p{X | Y}{x | y} \diff x = \int_\R g(x) \p{X | Y}{x | y} \diff x.
+    \end{multline*}
+
+    Если \(g(x)\) простая, то все верно в силу линейности обеих частей по \(g\).
+
+    Если \(g(x)\) произвольная, то приближаем ее простыми и пользуемся свойством о предельном переходе.
+\end{proof}
+
+\subsection{Нахождение условной плотности}
+Условная плотность --- непрерывный аналог формулы условной вероятности.
+
+\begin{theorem}[Достаточное условие существования условной плотности]
+    Пусть \(X, Y\) случайные величины, имеют совместную плотность \(\p{X, Y}{x, y}\). Тогда функция 
+    \begin{displaymath}
+    \p{X | Y}{x | y} = \begin{cases}
+        \frac{\p{X, Y}{x, y}}{\p{Y}y}, &\text{if } \p{Y}{y} > 0 \\
+        0 &\text{otherwise}.
+    \end{cases}
+    \end{displaymath}
+\end{theorem}
+\begin{proof}
+    Проверим, что
+    \begin{displaymath}
+        \int_B \p{X | Y}{x | y} \diff x
+    \end{displaymath}
+    есть условное распределение \(X\) при условии \(Y = y\). Проверяем три свойства: борелевская функция от \(Y\), вероятностная мера --- интеграл равен 1. Проверим свойство 3:
+    \begin{multline*}
+        \Pr{X \in B, Y \in A} = \int_{B \times A} \p{X, Y}{x, y} \diff x \diff y = \\ = \set{\text{пофубиним!}} = \int_A \left(\int_B \p{X, Y}{x, y} \diff x\right) \diff y = \\ = \int_A \left(\int_B \p{X | Y}{x | y} \diff x\right) \p{Y}y \diff y.
+    \end{multline*}
+\end{proof}
+

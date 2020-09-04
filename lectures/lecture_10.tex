@@ -1,0 +1,253 @@
+\section{Лекция 17.05.19}
+
+\subsection{Гауссовская линейная регрессия}
+
+\begin{definition}[Гауссовская линейная регрессия]
+    \begin{displaymath}
+        X = l + \varepsilon \quad X \in \R^n
+    \end{displaymath}
+    \(l \in L\) --- лин. подпростратснво в \(R^n\)
+\end{definition}
+
+\begin{theorem}
+    \(\widehat{\theta}(x)\) (ОМК) --- наилучшая в равномерном подходе с квадратичной функцией потерь.
+    \begin{displaymath}
+        \frac{1}{n - k} \abs{X - Z \widehat{\theta}(X)}^2
+    \end{displaymath} --- наилучшая оценка \(\theta^2\).
+\end{theorem}
+
+Цель --- построить доверительный интервалы и области для параметров \(\theta, \sigma^2\).
+
+\begin{theorem}[Об ортогональном разложении]
+    Пусть \(X \sim N(l, \sigma^2 I_n\) --- гаусс. вектор. Пусть \(L_1 + \ldots + L_r = \R^n\) --- разложение \(\R^n\) в прямую сумму ортогональных подпространств. Обозначим \(Y_j\) --- проекция \(X\) на \(L_j\). Проекции --- тоже случайные вектора; тогда \(Y_1, \ldots, Y_r\) независимы в совопкупности и
+    \begin{displaymath}
+        \forall j \in [1, r] \quad \frac{1}{\sigma^2} \abs{Y_j - E Y_j}^2 \sim Xhi^2_{\dim L_j}.
+    \end{displaymath}
+\end{theorem}
+
+\begin{definition}
+    Если \(\xi_1, \ldots, \xi_n \sim N(0, 1)\), нез, то с. в. \(\xi_1^2 + \ldots + \xi_n^2\) имеет хи-квадрат распределение.
+\end{definition}
+
+\begin{proof}
+    Хотим найти хороший базис в \(\R^n\). Пусть \(f_1, \ldots, f_n\) --- ортонормированный базис в \(\R^n\) такой, что \(f_1, \ldots, f_{k_1}\) --- базис в \(L_1\), \(f_{k_1 + 1}, \ldots, f_{k_2}\) --- в \(L_2\) и так далее. Обозначим \(Z_j = \langle X, L_j \rangle\)  --- координата \(X\) в \(f_1, \ldots, f_n\). Тогда
+    \begin{displaymath}
+        X = Z_1 f_1 + \ldots + Z_n f_n = (f_1, \ldots, f_n) \begin{pmatrix}
+            Z_1 \\ \vdots \\ Z_n
+        \end{pmatrix}
+    \end{displaymath}
+
+    Тогда \(C = (f_1, \ldots, f_n)\) --- ортогональная матрица. Обозначим \(W = \begin{pmatrix}
+        Z_1 \\ \vdots \\ Z_n
+    \end{pmatrix} = C^T X\).
+    Отсюда следует, что \(W\) --- гауссовсский. \(W \sim N(C^T L, C^T \sigma^2 I_n C) = N(C^T L, \sigma^2 I_n)\).
+    Значит, \(Z_1, \ldots, Z_n\) --- независимые в совокупности случайные величины. Отсюда первое утверждение следует автоматом: \(Y_j = \sum_{k_{j - 1} + 1}^{k_j} f_i Z_i\), и \(Y_j\) независимы в совокупности.
+
+    Рассмотрим
+    \begin{displaymath}
+        \frac{1}{\sigma^2}\br{Y_j - \EE{Y_j}} = \frac{1}{\sigma^2} \br{\sum_{i = k_{j - 1} + 1}^{k_j}} f_i (Z_i - \EE{Z_i}) =\sum_{i = k_{j - 1} + 1}^{k_j} \br{\frac{Z_i - \EE{Z_i}}{\sigma^2}}
+    \end{displaymath}
+    \(Z_i\) --- норм с дисперсией \(\sigma^2\).
+
+    Наконец, в силу ортонормированности \(f_1, \ldots, f_n\):
+    \begin{displaymath}
+        \abs{
+            \frac{
+                1
+            }{
+                \sigma^2
+            }
+            \br{
+                Y_j - \EE{Y_j}
+            }
+        }^2 = \sum_{\ldots}^{\ldots} \br{
+            \frac{
+                Z_i - \EE{Z_i}
+            }{
+                \sigma^2
+            }
+        } \sim X_{\dim L_j}^2.
+    \end{displaymath}
+\end{proof}
+
+\begin{remark}
+    В линейной гауссовсской модели
+    \begin{displaymath}
+        \frac{1}{\sigma^2} \abs{Z \widehat{\theta}(x ) - Z \theta}^2 \sim X^2_k
+    \end{displaymath}
+    \begin{displaymath}
+        \frac{1}{\sigma^2} \abs{X - Z \widehat{\theta}(x)}^2 \sim X^2_{n - k}
+    \end{displaymath}
+    \begin{displaymath}
+        \widehat{\theta}(X) \text{ и } X - Z \widehat{\theta}(X)
+    \end{displaymath}
+    независимы.
+\end{remark}
+\begin{proof}
+    \(X \sim N(Z \theta, \sigma^2 I_n)\).
+    \begin{gather*}
+        \mathrm{proj}_L X = Z \widehat{\theta} (X) \\
+        \mathrm{proj}_{L ^ \perp} X = X - Z \widehat{\theta} (X)
+    \end{gather*}
+    По теореме получаем, что они независимы и 
+    \begin{gather*}
+        \frac{1}{\sigma^2} \abs{Z \widehat{\theta}(x ) - \EE Z \widehat{\theta}(X)}^2 \sim X^2_k \\
+        \frac{1}{\sigma^2} \abs{X - Z \widehat{\theta}(x) - \EE(X - Z \widehat\theta(X))}^2 \sim X^2_{n - k} \sim X^2 _{\dim L} \\
+    \end{gather*}
+    Легко видеть, что
+    \begin{displaymath}
+        \widehat{\theta} = (Z^T Z)^{-1} Z^T Z \widehat{\theta}
+    \end{displaymath}
+    есть функция от \(Z \widehat{\theta}\), откуда тоже независима.
+\end{proof}
+
+\subsubsection{Доверительные интервалы и области для параметров гауссовской линейной модели}
+
+Доверительный интервал для \(\sigma^2\).
+
+Идея: находим центральную статистику, которая зависит от параметра, но распределение не зависит. \(\sigma^2\) в нашем случае --- параметр масштаба. В качестве центральной статистики --- 
+\begin{displaymath}
+    \frac{1}{\sigma^2} \abs{X - Z \widehat{\theta}(x)}^2.
+\end{displaymath}
+Пусть \(X_{\frac{1 - \gamma}{2}}\), \(X_{\frac{1 + \gamma}{2}}\) --- квантили \(X^2_{n - k}\). Тогда вероятность того, что мы окажемся между этими квантилями равна \(\gamma\):
+\begin{displaymath}
+    \PP{X_{\frac{1 - \gamma}{2}} \leq \frac{1}{\sigma^2} \abs{X - Z \widehat\theta (X)} \leq X_{\frac{1 + \gamma}{2}}} = \gamma
+\end{displaymath}
+откуда
+\begin{displaymath}
+    \sigma^2 \in \left(\frac{\abs{X - Z \widehat{\theta}(X)}^2}{X_{\frac{1 + \gamma}{2}}}, \frac{\abs{X - Z \widehat{\theta}(X)}^2}{X_{\frac{1 - \gamma}{2}}}\right).
+\end{displaymath}
+
+Доверительный интервал для \(\theta_i\).
+Вспомним, что
+\begin{displaymath}
+    \widehat{\theta}(X) \sim N(0, \sigma^2 (Z^T Z)^{-1})
+\end{displaymath}
+Отсюда
+\begin{displaymath}
+    \widehat{\theta}_i \sim N(\theta_i, \sigma^2 Z_{ii}).
+\end{displaymath}
+Значит,
+\begin{displaymath}
+    \frac{\widehat\theta_i - \theta_i}{\sqrt{Z_{ii} \sigma^2}} \sim N(0, 1).
+\end{displaymath}
+Согласно следствию, \(\widehat\theta\) и \(X - \widehat\theta\) независимы, и
+\begin{displaymath}
+    \frac{1}{\sigma^2} \abs{X - Z \widehat{\theta}(X)}^2 \sim X^2_{n - k} \implies
+\end{displaymath}
+\begin{displaymath}
+    \frac{\frac{\widehat\theta_i - \theta_i}{\sqrt{\sigma^2 Z_{ii}}}}{\sqrt{\frac{1}{\sigma^2} \frac{\abs{X - Z \widehat\theta(X)}^2}{n - k}}}
+\end{displaymath}
+не зависит от \(\sigma^2\)!
+
+\begin{definition}[Распредление Стьюдента]
+    Пусть \(\xi, \eta\) --- нез с в, \(\xi \sim \Norm(0, 1)\), \(\eta \sim X^2_m\). Тогда с в 
+    \begin{displaymath}
+        \delta = \frac{\xi}{\sqrt{\frac{\eta}{m}}}
+    \end{displaymath}
+    имеет распредление Стьдента с \(m\) степенями свободы.
+    \begin{displaymath}
+        \delta \sim T_m
+    \end{displaymath}
+\end{definition}
+
+Значит,
+\begin{displaymath}
+    \frac{\widehat\theta_i - \theta_i}{\sqrt{ Z_{ii} \frac{\abs{X - Z \widehat\theta(X)}^2}{n - k}}} \sim T_{n - k}
+\end{displaymath}
+Пусть \(t_{\frac{1 + \gamma}{2}}, t_{\frac{1 - \gamma}{2}}\) --- соотв коэфф \(T_{n - k}\).
+Тогда с вероятностью ровно \(\gamma\) получаем, что
+\begin{displaymath}
+    \PP{\frac{\abs {X - Z \widehat\theta(X)}^2}{n - k} < t_{\frac{1 + \gamma}{2}}} = \gamma \implies
+\end{displaymath}
+\begin{displaymath}
+    \theta_i \in \left(\widehat\theta_i - t_{\frac{1 + \gamma}{2}} \sqrt{\frac{Z_{ii} \abs{X - Z \widehat \theta(X)}^2}{n - k}}, \ldots\right)
+\end{displaymath}
+
+Доверительная область для \(\theta\)
+\begin{displaymath}
+    \frac{1}{\sigma^2} \abs{Z \widehat\theta(X) - Z \theta}^2 \sim X^2_k
+\end{displaymath}
+
+Избавляемся от \(\sigma^2\).
+\begin{displaymath}
+    \frac{1}{\sigma^2} \abs{X - Z \widehat\theta(X)}^2 \sim X^2_{n - k}
+\end{displaymath}
+Они независимы;
+\begin{displaymath} 
+    \frac{\frac{1}{\sigma^2} \abs{Z \widehat\theta(X) - Z \theta}^2}
+    {\frac{1}{\sigma^2} \abs{X - Z \widehat\theta(X)}^2}
+\end{displaymath}
+не зависит от \(\sigma\).
+
+%% n, m -> m_1, m_2
+\begin{definition}
+    Пусть \(\xi, \eta\) нз св, \(\xi \sim X^2_n\), \(\eta \sim X^2_m\), тогда
+    \begin{displaymath}
+        \delta = \frac{\xi}{\eta} \frac{m}{n}
+    \end{displaymath}
+    имеет распредление Фишера (Снедекора) с \(n, m\) степенями свободы.
+
+    Обозначется \(\delta \sim F_{n, m}\).
+\end{definition}
+
+Значит,
+\begin{displaymath} 
+    \frac{\abs{Z \widehat\theta(X) - Z \theta}^2}
+    {\abs{X - Z \widehat\theta(X)}^2} \frac{n - k}{k} \sim F_{n - k, k}.
+\end{displaymath}
+Пусть квантили \(f_\gamma\). Тогда
+\begin{displaymath}
+    \delta(X) = \set{\theta \in \R^n ~:~ \frac{\abs{Z \widehat\theta(X) - Z \theta}^2}
+    {\abs{X - Z \widehat\theta(X)}^2} \frac{n - k}{k}} < f_\gamma
+\end{displaymath}
+Доверительный эллипсоид в \(\R^k\).
+
+\begin{example}
+    \(X_1, \ldots, X_n \sim \Norm(a, \sigma^2)\) --- выборка. Сведем задачу к гауссовской линейной регрессии.
+    \begin{displaymath}
+        X_i = l_i + \epsilon_i, \quad \epsilon_i \sim \Norm(0, \sigma^2).
+    \end{displaymath}
+    \begin{gather*}
+        l = \begin{pmatrix}
+            a \\ a \\ \vdots \\ a
+        \end{pmatrix} \\
+        L = \set{x_1 = x_2 = \ldots = x_n = a} \\
+        \theta = a \\
+        Z = \begin{pmatrix}
+            1 \\ 1 \\ \vdots \\ 1
+        \end{pmatrix}
+    \end{gather*}
+\end{example}
+
+
+\subsection{Проверка гипотез}
+Проверка гипотез --- другой взгляд на построение доверительных интервалов.
+
+\(X\) --- наблюдение с распр \(P \in \mathcal{P}\).
+\begin{definition}[Статистическая гипотеза]
+    Стат гипотезой наз предположение \(H_0: P \in \mathcal{P}_0\), где \(\mathcal{P}_0 \subseteq \mathcal{P}\) --- некоторый подкласс в \(\mathcal{P}\).
+
+    Если \(H_0\) принимается, то \(\mathcal{P}\) заменятся \(\mathcal{P}_0\).
+    Если \(H_0\) отвергается, то \(P\) заменяется на дополнение.
+\end{definition}
+
+\begin{example}
+    Нам выдали какие-то числа: \(0, 1, 2, 1, 0, 0, 1, 1, \ldots\).
+
+    \begin{enumerate}    
+        \item \(H_0: \mathrm{Pois}(0, 5)\).
+        \item \(H_0: \mathrm{Pois}\).
+    \end{enumerate}
+\end{example}
+
+\begin{itemize}
+    \item Ошибка первого рода --- отвергли \(H_0\), когда была верна;
+    \item Ошибка второго рода --- приняли \(H_0\), когда она неверна;
+\end{itemize}
+
+Методологически считается, что ошибка первого рода опаснее.
+
+Часто мы работаем не с одной гипотезой: гипотеза с альтернативой. Пусть \(H_0 : P \in \mathcal{P}_0\) --- основная гипотеза, то может быть альтернвативная гипотеза \(H_1 : P \in \mathcal{P}_1\), где \(\mathcal{P}_1 \subseteq \mathcal{P} \setminus \mathcal{P}_0\).
+
+Цель --- по наблюдению \(X\) проверить, принимать ли \(H_0\).

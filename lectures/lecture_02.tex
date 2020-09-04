@@ -1,0 +1,288 @@
+\section{Лекция 2}
+\begin{theorem}[Гливенко--Кантелли]
+Пусть F(x) -- настоящая функция распределения вектора $(x_1 \ldots x_n)$\\
+Тогда
+$$ \sup_{ x \in \mathbb R}|F^{*}_{n}(x) - F(x)| \asto 0
+$$
+\end{theorem}
+\begin{proof}
+Пусть ($X_n$, n $\in \mathbb{N})$ -- независимые одинаково распределенные случайные величины с функцией распределения F(x). Проверим, что $\sup_{ x \in \mathbb R}|F^{*}_{n}(x) - F(x)|$ является случайной величиной. Пусть ($X_n$, n $\in \mathbb{N})$ заданы на ($\Omega, \mathbb{F}, \mathbb{P})$. Введём $\forall\omega$ $\in \Omega$
+\[
+    D_n(w) = \sup_{ x \in \mathbb R}|F^{*}_{n}(x, w) - F(x)|,
+\]
+где $F^{*}_{n}(x, w) = \frac{1}{n}\sum\limits_{i = 1}^{n}\mathrm{I}\{X_{i}(w) \leq x\}$ -- сумма случайных величин. Проверим, что $D_n$ -- случайная величина.\\
+Заметим, что 
+\[
+\sup_{ x \in [0,1]}f(x) = \sup_{ x \in \mathbb{Q} \cap [0,1]}f(x)
+\]
+$\forall$ фиксированного $\omega \in \Omega$ $|F^{*}_{n}(x, w) - F(x)|$ -- непрерывная справа функция на $\R$.
+\[
+D_n(w) = \sup_{ x \in \mathbb R}|F^{*}_{n}(x, w) - F(x)|
+\]
+Но супремум счетного набора ограниченных случайных величин является случайной величиной. Таким образом, $D_n$ -- случайная величина. $\forall N \in \mathbb{N}$ введём
+\[
+x_{k, N} = \min\{x|F(x) \geq \frac{k}{N}\}, k = 1, \ldots, N - 1
+\]
+Положим $x_{0, N} = -\infty, x_{N, N} = +\infty$. Таким образом, при фиксированном N прямая разбивается следующим образом:
+\[
+(x_{0, N}, x_{1, N})[x_{1, N}, x_{2, N})\ldots [x_{N-1, N}, x_{N, N})
+\]
+Пусть $x \in [x_{k, N}, x_{k + 1, N})$. Тогда
+\[
+F^{*}_{n}(x) - F(x) \leq F^{*}_{n}(x_{k+1, N} - 0) - F(x_{k, N}) = |f(x - 0) - \text{предел слева}| = 
+\]
+\[
+= F^{*}_{n}(x_{k+1, N} - 0) - F(x_{k+1, N} - 0) + F(x_{k+1, N} - 0) - F(x_{k+1, N } - 0) \leq F^{*}_{n}(x_{k+1, N} - 0) - F(x_{k+1, N} - 0) + \frac{k + 1}{N} - \frac{k}{N} =
+\]
+\[
+= F^{*}_{n}(x_{k+1, N} - 0) - F(x_{k+1, N} - 0) + \frac{1}{N}
+\]
+Аналогичным образом оценим снизу:
+\[
+F^{*}_{n}(x) - F(x) \geq F^{*}_{n}(x_{k, N} - 0) - F(x_{k + 1, N} - 0) = F^{*}_{n}(x_{k, N} - 0) - F(x_{k, N}) + F(x_{k, N}) - F(x_{k+1, N } - 0) \geq F^{*}_{n}(x_{k, N} - 0) - F(x_{k, N}) - \frac{1}{N}
+\]
+В итоге, 
+\[
+D_n \leq \max_{0 \leq k, l \leq N}\{|F^{*}_{n}(x_{k, N}) - F(x_{k, N})| + \frac{1}{N}, |F^{*}_{n}(x_{l, N} - 0) - F(x_{l, N} - 0)| + \frac{1}{N}\}
+\]
+Согласно УЗБЧ:
+\[
+F^{*}_{n}(x_{k, N}) - F(x_{k, N}) = \frac{1}{n}\sum_{i = 1}^{n}\mathrm{I}\{X_{i} \leq x_{k, N}\} - F(x_{k, N}) \asto 0
+\]
+\[
+F^{*}_{n}(x_{l, N} - 0) - F(x_{l, N} - 0) = \frac{1}{n}\sum_{i = 1}^{n}\mathrm{I}\{X_{i} \le x_{l, N}\} - F(x_{l, N}) \asto P(X_1 < x_{l,N}) - F(x_{l, N} - 0) = F(x_{l, N} - 0) - F(x_{l, N} - 0) = 0
+\]
+Введём 
+\[
+\Omega_N = \{w: F^{*}_{n}(x_{k, N}) \asto F(x_{k, N}), F^{*}_{n}(x_{l, N} - 0) \asto F(x_{l, N} - 0)\}
+\]
+Тогда $P(\Omega_N) = 1$  $\forall N \in \mathbb{N}$  и $\forall \omega \in \Omega_N$
+\[
+\overline{\lim\limits_{n\to \infty}} D_n(w) \leq \frac{1}{N}
+\]
+Положим $\Omega' = \bigcap\limits_{N    = 1}^{\infty}\Omega_N$. Тогда $P(\Omega') = 1$ и $\forall\omega \in \Omega'$ $\exists\lim\limits_{n \to \infty}D_n(w) = 0$, что и означает сходимость почти наверное: 
+\[
+D_n \asto 0
+\]
+\end{proof}
+
+\subsection{Параметрическая модель}
+Пусть \(X\) -- наблюдение(случайный вектор) с неизвестным распределением \(P\). В параметрической модели про \(P\) известно, что оно лежит в каком-то семействе распределений $\mathcal P$, которое параметризовано параметром $\theta \in \Theta$:
+$$ 
+    \mathcal P = \{P_{\theta}, \theta \in \Theta\}
+$$
+
+\begin{example}
+     $\mathcal{N}(a, \sigma^2), \theta = (a, \sigma^2)$ -- двупараметрическое семейство.
+\end{example}
+
+\begin{example}     
+    \(Bin(1, \theta), \theta \in [0, 1]\) -- схема Бернулли.
+\end{example}
+
+\begin{example}
+        $\mathcal{U}$($\theta_1$, $\theta_2$), $\theta_1 < \theta_2$, $\theta = (\theta_1, \theta_2)$
+\end{example}
+        
+Суть параметрической модели: для нахождения истинного распределения достаточно найти истинные значения параметра! При условии, что параметр различает распределения:
+$$ \theta_1 \ne \theta_2 \Rightarrow P_{\theta_1} \ne P_{\theta_2}
+$$
+
+Если \(X = (X_1 \ldots X_n)\) -- выборка, то достаточно найти распределение только одного $X_i$ (\hyperref[label]{см. определение}) $\Rightarrow$ $\theta$ -- параметр распределения одного $X_i$.
+
+\subsection{Точечное оценивание}
+
+\begin{definition}
+Пусть $\mathcal{X}$ -- некоторое множество значений \(X\), a S: $\mathcal{X} \to \mathbb{R}^{d}$ -- некоторая борелевская функция. Тогда функция \(S\) называется \emph{статистикой}. 
+\end{definition}
+
+\begin{definition}
+Если статистика \(S\) принимает значения в $\Theta$, то \(S(X)\) можно назвать \emph{оценкой параметра $\theta$}. Оценки параметра $\theta$ будем обозначать $\hat{\theta}(x)$, $\tilde{\theta}(x)$, $\theta^{*}(x)$.
+\end{definition}
+
+\begin{remark}
+Можно оценивать функции от параметра $\tau(\theta)$, но тогда \(S\) должна принимать значения в $\tau(\Theta)$
+\end{remark}
+Теперь конкретнее, пусть \(X = (X_1, \ldots, X_n), X_i \in \mathbb{R}\).
+
+Основная идея: пусть $\mathbb{Q}$ -- распределение вероятностей на $\mathbb{R}$, $\xi_{\mathbb{Q}}$ -- случайная величина с распределением $\mathbb{Q}$, G -- некоторый функционал на множестве распределений(ставит распределению в соответствие число или вектор) $\Rightarrow$ 
+$$\hat{\theta}(x) = G(P^{*}_n),$$где $P^{*}_n$ -- эмпирическое распределение.
+
+\begin{example}
+Пусть \(g\) -- борелевская функция. Рассмотрим функционал выборочного усреднения, а именно:
+$$
+G(\mathbb{Q}) = \E g(\xi_{\mathbb{Q}}) \Rightarrow
+$$
+
+$$
+\hat{\theta}(x) = G(P^{*}_n) = \frac{1}{n}\sum_{i = 1}^{n}g(X_i)
+$$
+-- среднее выборочное значение функции g по выборке X, которое мы будем обозначать $\overline{g(x)}$. Важные примеры:\\
+\begin{itemize}
+    \item \(g(x) = x\) $\Rightarrow$ $\overline{x} = \frac{1}{n}\sum\limits_{i = 1}^{n}X_i$ -- выборочное среднее.
+    \item \(g(x) =\) $x^{k}$ $\Rightarrow$ $\overline{x^k} = \frac{1}{n}\sum\limits_{i = 1}^{n}x^k_i$ -- выборочный момент порядка \(k\).
+\end{itemize}
+\end{example}
+В качестве функционала можно рассмотреть и более общие функции:
+
+\begin{example}
+Пусть \(h\colon\) $\mathbb{R}^k \to \mathbb{R}$ -- борелевская функция, рассмотрим функционал \(G\), заданный следующим образом:
+$$
+    G(\mathbb{Q}) = h(\E g_1(\xi_\mathbb{Q}), \ldots \E g_k(\xi_\mathbb{Q})) = h(\overline{g_1(x)}, \ldots \overline{g_k(x)})
+$$
+
+Тогда
+$
+    \hat{\theta}(x) = G(P^{*}_n) = \frac{1}{n}\sum\limits_{i = 1}^{n}g(X_i)
+$
+-- среднее выборочное значение функции g по выборке X, которое мы будем обозначать $\overline{g(x)}$. Важные примеры:\\
+
+\begin{itemize}
+    \item \(h(x, y) = y -\) $x^2$, \\$g_1(x) = x^2$,\\ $g_2(x) = x$ $\Rightarrow$ $S^2 = \overline{x^2} - (\overline{x})^2$ -- \emph{выборочная дисперсия}
+    \begin{exercise}
+        Покажите, что $S^2$ = $\frac{1}{n}\sum\limits_{i = 1}^{n}(X_i - \overline{x})^2$
+    \end{exercise}
+    \item $M_k$ = $\frac{1}{n}\sum\limits_{i = 1}^{n}(X_i - \overline{x})^k$, $k \in \mathbb{N} -- \emph{выборочный центральный момент порядка k}.$
+\end{itemize}
+\end{example}
+
+\begin{example} 
+Порядковые статистики: \\
+Дана выборка $(X_1, \ldots, X_n)$. Упорядочим по возрастанию:\\
+\begin{itemize}
+    \item $X_{(1)}$ = $\min(X_1, \ldots, X_n)$ -- первый по порядку.
+    \item $X_{(2)}$ = $\min((X_1, \ldots, X_n)/\{X_{(1)}\})$ -- второй по порядку.
+    \item \ldots
+    \item \ldots
+    \item $X_{(n)}$ = $\max((X_1, \ldots, X_n)$ -- последний по порядку.
+\end{itemize}
+Тогда $(X_{(1)}, \ldots, X_{(n)})$ называется \emph{вариационным рядом}.
+\end{example}
+
+\begin{example}
+Выборочные квантили: 
+\begin{definition}
+Пусть $\mathbb{Q}$ -- распределение вероятностей на $\mathbb{R}$ с функцией распределения F(x), p $\in$ (0, 1), тогда \emph{p-квантилью} распределения $\mathbb{Q}$ называется 
+$$ \zeta_p = min\{x: F(x) \geq p\}$$
+
+\begin{remark}
+Если F(x) непрерывна, то F($\zeta_p$) = p
+\end{remark}
+
+\begin{remark}
+$F^{*}_{n}(X_{(k)})$ = $\frac{k}{N}$
+\end{remark}
+\end{definition}
+
+\begin{definition}
+\emph{Выборочной p-квантилью} называется
+$$Z_{n,p} =
+\begin{cases}
+X_{([np] + 1)}, np \notin \mathbb{Z} \\
+X_{(np)}, np \in \mathbb{Z} \\
+\end{cases}
+$$
+
+\begin{remark}
+$Z_{n,p}$ является p-квантилью эмпирического распределения $P^{*}_n$
+\end{remark}
+\end{definition}
+\begin{definition}
+Пусть p = $\frac{1}{2}$. Тогда $\frac{1}{2}$-квантиль называется \emph{медианой}.
+\end{definition}
+\end{example}
+
+\begin{example}
+M-оценки: (\TODO{тут надо больше сказать}).\\
+Пусть f: $\R \times \Theta \to \R$ -- какая-то(?) функция, рассмотрим следующий функционал G:
+$$ G(\mathbb{Q}) = \argmax_{\theta \in \Theta}\frac{1}{n}\sum_{i = 1}^{n}f(X_i, \theta)
+$$
+\TODO{Cюда примерчика не хватает.}
+\end{example}
+
+\subsection{Cвойства оценок}
+\subsubsection{Несмещённость}
+\begin{definition}
+Оценка $\hat{\theta}(x)$ называется \emph{несмещённой оценкой параметра $\theta$} $\in$ $\mathbb{R}^k$, если
+$$
+    \forall \theta \in \Theta  \ \  \E_\theta \hat\theta(x) = \theta
+$$
+\end{definition}
+\begin{remark}
+    $\E_\theta \hat\theta(x)$ -- матожидание, вычисленное в предположении, что $P_{\theta}$ -- истинное распределение X.
+\end{remark}
+\begin{example}
+    Пусть $X_1, \ldots X_n \sim \mathcal{N}$($\theta$, 1), $\theta \in \mathbb{R}$, тогда легко проверить, что $\overline{x}$, $X_1$ являются несмещенными оценками параметра $\theta$.
+\end{example}
+
+\vspace{3pt}
+
+\subsubsection{Состоятельность}
+\begin{definition}
+    Пусть X = ($X_1, \ldots X_n$) -- выборка <<растущего>> размера(говорим, что она растущая, чтобы брать предел по n).
+\end{definition}
+\begin{definition}
+Оценка $\hat\theta(X_1, \ldots X_n)$ (точнее говоря, последовательность оценок) называется \emph{состоятельной} оценкой параметра $\theta$, если $\forall \theta \in \Theta$
+$$
+    \hat\theta(X_1, \ldots X_n) \prtto \theta
+$$
+($\prtto$ в предположении, что $P_{\theta}$ -- истинное распределение)
+\end{definition}
+
+\begin{example}
+Пусть $X_1, \ldots X_n \sim \mathcal{N}$($\theta$, 1), тогда по ЗБЧ:
+$$
+    \hat\theta(X_1, \ldots X_n) \prtto \theta,
+$$
+что означает состоятельность оценки $\overline{x}$. Но оценка $X_1$ -- несостоятельная оценка $\theta$(легко видеть, поскольку случайная величина никуда не сходится).
+\end{example}
+
+\vspace{3pt}
+\subsubsection{Сильная состоятельность}
+
+\begin{definition}
+Оценка $\hat\theta(X_1, \ldots X_n)$ (точнее говоря, последовательность оценок) называется \emph{сильно состоятельной} оценкой параметра $\theta$, если $\forall \theta \in \Theta$
+$$
+\hat\theta(X_1, \ldots X_n) \astto \theta
+$$
+\end{definition}
+\subsubsection{Асимптотическая нормальность}
+\begin{definition}
+Оценка $\hat\theta(X_1, \ldots X_n)$ (точнее говоря, последовательность оценок) называется \emph{асимптотически нормальной} оценкой параметра $\theta$, с асимптотической дисперсией $\sigma^2$($\theta$) если $\forall \theta \in \Theta$
+$$
+    \sqrt{n}(\hat\theta(X_1, \ldots X_n) - \theta) \dtto \mathcal{N}(0, \sigma^2(\theta))
+$$
+\end{definition}
+
+\begin{example}
+$$
+    \sqrt{(n)}(\overline{x} - \theta) \dtto \mathcal{N}(0, \theta(1 - \theta))
+$$
+\end{example}
+
+\begin{remark}
+Можно оценивать не $\theta$, a $\tau(\theta)$
+\end{remark}
+
+\begin{proposition}
+Взаимосвязь свойств оценок:
+\begin{itemize}
+    \item Из асимптотической нормальности следует состоятельность.
+    \item Из сильной состоятельности следует состоятельность.
+\end{itemize}
+\end{proposition}
+\begin{proof} \ 
+
+\begin{itemize}
+    \item запишем условие асимптотической нормальности:
+    $$
+    \sqrt{n}(\hat\theta(X_1, \ldots X_n) - \theta) \dtto \mathcal{N}(0, \sigma^2(\theta)),
+    $$
+    тогда
+    $$
+    (\hat\theta(X_1, \ldots X_n) - \theta) \dto 0,
+    $$
+    известно, что если случайная величина сходится по распределению к константе, то она сходится и по распределению.
+    \item Т.к. из сходимости "почти наверное" следует сходимость по вероятности, то, вспомнив определения состоятельности и сильной состоятельности, получаем требуемое утверждение.
+\end{itemize}
+\end{proof}

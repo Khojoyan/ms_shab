@@ -1,0 +1,287 @@
+\section{Лекция 3}
+
+\subsection{Наследование свойств}
+Неформально:  $\hat\theta_n(X_1, \ldots X_n)$ -- оценка $\theta$, тогда $f(\hat\theta_n(X_1, \ldots X_n))$ оценивает $f(\theta)$
+\begin{proposition}
+Наследование состоятельности.\\
+Пусть $\hat\theta_n(X_1, \ldots X_n)$ -- состоятельная оценка $\theta$, $\tau:\theta \to \R$. Тогда $\tau(\hat\theta_n(X_1, \ldots X_n))$ -- состоятельная оценка $\tau(\theta)$.
+\end{proposition}
+\begin{proof}
+Очевидно следует из теоремы о наследовании сходимости.
+\end{proof}
+\begin{remark}
+Схема работает и наоборот: пусть $\hat\theta_n(X_1, \ldots X_n)$ -- состоятельная оценка $\tau(\theta)$, $\tau^{-1} \in C$ $\Rightarrow$ $\tau^{-1}(\hat\theta_n(X_1, \ldots X_n))$ -- состоятельная оценка $\theta$.
+\end{remark}
+
+\begin{example}
+Пусть $X_1, \ldots X_n \sim Exp$($\theta$), $\theta > 0$\\
+$\E_{\theta}X_1 = \frac{1}{\theta}$, тогда $\overline{X}$ -- состоятельная оценка $\frac{1}{\theta}$ $\Rightarrow$ $\frac{1}{\overline{X}}$ -- состоятельная оценка $\theta$
+\end{example}
+
+\begin{proposition}
+Если $\hat\theta_n(X_1, \ldots X_n)$ -- асимптотически нормальная оценка $\theta$ с асимптотической дисперсией $\sigma^2(\theta)$, а $\tau:\Theta \to \R$ -- дифференцируемая функция, то $\tau(\hat\theta_n(X_1, \ldots X_n))$ -- асимптотически нормальная оценка $\tau(\theta)$ с асимптотической дисперсией $\sigma^2(\theta)(\tau'(\theta))^2.$
+\end{proposition}
+
+\begin{proof}
+Согласно многомерной ЦПТ:
+$$
+\sqrt{n}(\hat\theta(X_1, \ldots X_n) - \theta) \dto \mathcal{N}(0, \sigma^2(\theta))
+$$
+Согласно следствию из многомерной ЦПТ:
+$$
+\sqrt{n}(\tau(\hat\theta(X_1, \ldots X_n)) - \tau(\theta)) \dto \tau^{'}(\theta)\mathcal{N}(0, \sigma^2(\theta)) \Rightarrow
+$$
+$$
+\sqrt{n}(\tau(\hat\theta(X_1, \ldots X_n)) - \tau(\theta)) \dto \mathcal{N}(0, \sigma^2(\theta)(\tau^{'}(\theta))^2)
+$$
+\end{proof}
+
+\begin{example}
+Пусть $X_1, \ldots X_n \sim Exp$($\theta$), $\theta > 0$. Найти асимптотически нормальную оценку $\theta$.
+\end{example}
+
+\begin{proof}
+Согласно ЦПТ:
+$$
+\sqrt{n}(\overline{X} - \frac{1}{\theta}) \dto \mathcal{N}(0, D_{\theta}X_1) \Rightarrow
+$$
+$$
+\sqrt{n}(\overline{X} - \frac{1}{\theta}) \dto \mathcal{N}(0, \frac{1}{\theta^2})
+$$
+Пусть $\tau(x) = \frac{1}{x} \Rightarrow \tau'(x) = -\frac{1}{x^2} \Rightarrow \tau(\frac{1}{\theta}) = -\theta^2$. Тогда по следствию из многомерной ЦПТ:
+$$
+\sqrt{n}(\frac{1}{\overline{X}} - \theta) \dto \mathcal{N}(0, \frac{1}{\theta^2})\tau'(\frac{1}{\theta})
+$$
+$$
+\sqrt{n}(\frac{1}{\overline{X}} - \theta) \dto \mathcal{N}(0, \theta^2)
+$$
+
+\end{proof}
+
+\subsection{Методы нахождения оценок}
+
+I. Принцип двойственности.
+Пусть $X_1, \ldots X_n$ -- выборка из $\mathcal P = \{P_{\theta}, \theta \in \Theta\}$.\\
+Пусть G -- функционал, такой что $\forall \theta \in \Theta$
+$$
+G(P_{\theta}) = \theta
+$$
+Тогда 
+$$
+\hat\theta^{*}_n(X_1 \ldots X_n) = G(P^{*}_n)
+$$
+будет являться "хорошей" оценкой $\theta$, где $P^{*}_n$ -- это эмпирическое распределение.
+
+II. Метод моментов.
+Идея -- моменты однозначно определяют параметр.\\
+Пусть $\Theta \subset \R^k$, а \\
+$g_1(x) \ldots g_k(x)$ такие борелевские функции, что m:$\theta \to \R^k$, где $m_i(\theta) = \E_{\theta} g_i(x1), 1 \leq i \leq k$, является биекцией между $\Theta$ и m($\theta$) (короче говоря, m инъективна).\\
+Тогда оценкой параметра $\theta$ с пробными функциями $g_1(x), \ldots g_k(x)$ называется решение системы: \\
+$$
+\begin{cases}
+m_1(\theta) = \overline{g_1(x)} \\
+\ldots \\
+\ldots \\
+\ldots \\
+m_n(\theta) = \overline{g_n(x)} 
+\end{cases} 
+$$
+где $\overline{g_i(x)} = \frac{1}{n}\sum_{j = 1}^{n}g(X_j)$
+\begin{remark}
+Стандартные пробные функции:
+$$
+\begin{cases}
+m_1(\theta) = x \\
+\ldots \\
+\ldots \\
+\ldots \\
+m_n(\theta) = x^n 
+\end{cases} 
+$$
+\end{remark}
+
+\begin{example}
+Пусть $X_1, \ldots X_n \sim \mathcal{N}$(a, $\sigma^2$), $\theta = (a, \sigma^2)$. Найти оценку параметра $\theta$ по методу моментов.
+\end{example}
+\begin{proof}
+$$
+\begin{cases}
+g_1(x) = x \\
+g_2(x) = x^2
+\\
+\end{cases}
+$$
+$$
+\begin{cases}
+\E_{\theta}X_1 = a = \overline{x} \\
+\E_{\theta}x^2_{1} = \sigma^2 + a^2 = \overline{x^2}\\
+\end{cases}
+$$
+$\Rightarrow$
+$$
+\begin{cases}
+ a^{*}(X_1 \ldots X_n) = \overline{x} \\
+(\sigma^2)^{*}(X_1 \ldots X_n) = \overline{x^2} - (\overline{x})^2 = S^2
+\end{cases}
+$$
+Ответ: $\theta = (\overline{x}, S^2)$
+\end{proof}
+
+\begin{lemma}
+Пусть $m^{-1}$ непрерывна. Тогда оценка по методу моментов состоятельна.
+\end{lemma}
+\begin{proof}
+Согласно ЗБЧ:
+$$
+\overline{g_i(x)} = \frac{1}{n}\sum_{j = 1}^{n}g_i(X_j) \overset{P_\theta}{\to} \E g_i(X_i) = m_i(\theta)
+$$
+Но оценка $\theta^{*}(X_1 \ldots X_n) = m^{-1}(\overline{g_1(x)} \ldots \overline{g_n(x)}$. ПО теореме о наследовании сходимости:
+$$
+m^{-1}(\overline{g_1(x)} \ldots \overline{g_n(x)}) \overset{P_\theta}{\to} m^{-1}(m_1(\theta) \ldots m_n(\theta)) = m^{-1}(m(\theta)) = \theta
+$$
+\end{proof}
+
+\begin{lemma}
+Пусть функция $m^{-1}$ дифференцируема, и $\forall i = 1 \ldots k$ $\forall \theta$ $\E_\theta g^2_i(X_i) < \infty$. Тогда $\forall i = 1 \ldots k$ оценка $\theta^{*}(X_1 \ldots X_n)$ ассимптотически нормальная оценка $\theta_i$
+\end{lemma}
+\begin{proof}
+Следствие из многомерной цпт и дельта-метода. \TODO{}
+\end{proof}
+Подведём итог рассмотрением плюсов и минусов метода моментов.\\
+Плюсы:
+\begin{itemize}
+    \item состоятельность
+    \item ассимптотическая нормальность
+    \item просто доказывать
+\end{itemize}
+Минусы:
+\begin{itemize}
+    \item Надо уметь решать системы уравнений, что, в общем случае, алгоритмически неразрешимо
+    \item Надо уметь вычислять $\E_\theta g_i(t)$ как функции от $\theta$
+\end{itemize}
+
+\begin{example}
+Пусть дано распределение Коши со сдвигом:
+$$
+P_\theta(x) = \frac{1}{\pi((x - \theta)^2 + 1)}
+$$
+В данном случае все стандартные моменты не существуют. Но $\theta$ -- медиана!!!
+\end{example}
+
+III Метод выборочных квантилей.\\
+Идея: квантили определяют параметр.
+Пусть $X_1 \ldots X_n$ -- выборка, p $\in$ (0, 1), тогда выборочной p-квантилью называется:
+$$Z_{n,p} =
+\begin{cases}
+X_{([np] + 1)}, np \notin \mathbb{Z} \\
+X_{(np)}, np \in \mathbb{Z} \\
+\end{cases}
+$$
+
+\begin{theorem}[О выборочных квантилях]
+Пусть $(X_1 \ldots X_n \ldots)$ -- бесконечная выборка из распределения с функцией распределения F(x) и плотностью f(x). Пусть $Z_p$-- p-квантиль F, f($Z_p$) > 0, f(x) непрерывно дифференцируема в окрестности $Z_p$. Тогда
+$$
+\sqrt{n}(Z_{n,p} - Z_p) \dto \mathcal{N}(0, \frac{p(1 - p)}{f^2(Z_p)})
+$$
+\end{theorem}
+
+\begin{definition}
+\emph{Выборочной медианой} называется $\hat{\mu}$
+$$\hat{\mu} =
+\begin{cases}
+X_{(k + 1)}, n = 2k + 1 \\
+\frac{X_{(k)} + X_{(k + 1)}}{2}, n = 2k \\
+\end{cases}
+$$
+\end{definition}
+
+\begin{proposition}
+В условиях теоремы для p = $\frac{1}{2}$ верно следующее:
+$$
+\sqrt{n}(\hat{\mu} - Z_{\frac{1}{2}}) \overset{d}{\to} \mathcal{N}(0, \frac{1}{4f^2(Z_{\frac{1}{2}})})
+$$
+\end{proposition}
+
+\begin{example}
+В случае распределения Коши
+$$
+\sqrt{n}(\hat{\mu} - \theta) \overset{d_\theta}{\to} \mathcal{N}(0, \frac{\pi^2}{4})
+$$
+\end{example}
+
+\begin{example}
+Пусть $X_1, \ldots X_n \sim \mathcal{N}(\theta, 1$). Тогда заметим, что $\theta$ является математическим ожиданием медианы. В связи с этим возникает вопрос: Что лучше? Выборочное среднее или медиана? Напомним, что в данном случае f(x) = $\frac{1}{\sqrt{2\pi}}e^{-\frac{(x - \theta)^2}{2}}$.
+$$
+\sqrt{n}(\overline{x} - \theta) \overset{d}{\to} \mathcal{N}(0, 1)
+$$
+$$
+\sqrt{n}(\hat{\mu} - \theta) \overset{d}{\to} \mathcal{N}(0, \frac{2\pi}{4}) \Rightarrow
+$$
+$\overline{x}$ лучше.
+\end{example}
+
+Теперь мы почти честно докажем теорему о выборочных квантилях. Для этого нам понадобится лемма Шеффе.
+
+\begin{lemma}[Шеффе]
+Пусть случайные величины $\{\xi_n, n \in \N\}, \xi$ имеют плотности$\{p_n(x)\}$ и p(x). И пусть $\forall x \in \R$
+\[
+p_n(x) \xrightarrow[n \to \infty]{} p(x),
+\]
+Тогда
+\[
+\xi_n \dto \xi
+\]
+\end{lemma}
+
+\begin{proof}
+Положим $\delta_n(x) = p(x) - p_n(x)$. Также положим $$
+\begin{cases}
+$\delta^+_n(x) = \max(\delta_n(x), 0)$ -- положительная часть функции $\delta_n(x)$\\ $\delta^-_n(x) = \max(-\delta_n(x), 0)$ -- соответственно отрицательная часть функции $\delta_n(x)$.
+\end{cases}
+$$
+Тогда очевидно, что $\delta_n(x) = \delta^+_n(x) - \delta^-_n(x)$. Заметим, что $\int\limits_{-\infty}^{+\infty}\delta_n(x)dx = 0$. Тогда $\int\limits_{-\infty}^{+\infty}\delta^+_n(x)dx = \int\limits_{-\infty}^{+\infty}\delta^-_n(x)dx$ 
+Заметим, что $\delta^{+}_n(x) \leq p(x)$ и положим
+\[
+\eta_n = \frac{\delta^{+}_n(\xi)}{p(\xi)}I_{\{ p(\xi) > 0\}}
+\]
+Тогда $\eta_n \geq 0, \eta_n < 1$. Хотим: $\eta_n \asto 0$. Но это выполнено, поскольку $\delta^{+}_n(x) \to 0 \forall x \in \R$. Тогда по теореме Лебега о мажорируемой сходимости(мажорируем 1): $\E\eta_n \to 0$. Распишем это подробнее:
+\[
+\int\limits_{-\infty}^{+\infty}\frac{\delta^{+}_n(x)}{p(x)}p(x)I_{\{ p(\xi) > 0\}}dx = \int\limits_{-\infty}^{+\infty}\delta^{+}_n(x)dx \to 0
+\]
+Тогда $\forall y \in \R:$
+\[
+|P(\xi \leq y) - P(\xi_n \leq y)| = |\int\limits_{-\infty}^{y}p(x)dx - \int\limits_{-\infty}^{y}p_n(x)dx| = |\int\limits_{-\infty}^{y}\delta_n(x)dx| \leq \int\limits_{-\infty}^{y}|\delta_n(x)|dx =
+\]
+\[
+= \int\limits_{-\infty}^{y}(\delta^+_n(x) + \delta^-_n(x))dx \leq \int\limits_{-\infty}^{+\infty}(\delta^+_n(x) + \delta^-_n(x))dx = 2\int\limits_{-\infty}^{y}\delta^+_n(x)dx \to 0
+\]
+\end{proof}
+
+Теперь приступим к почти честному доказательству теоремы о выборочных квантилях.
+
+\begin{proof} 
+Пусть $1 \geq k \geq n$. Тогда случайная величина $X_{(k)}$ имеет плотность:
+\[
+\overline{p}_k(x) = {n - 1 \choose k - 1} n f(x)F^{k-1}(x)(1 - F(x))^{n-k} 
+\]
+Далее запускаем подгонку под ответ: случайная величина
+\[
+\sqrt{n}(X_{(k)} - Z_p)\sqrt{\frac{f^2(Z_p)}{p(1 - p)}}
+\]
+имеет плотность
+\[
+q_k(x) = \overline{p}_k(Z_p + x\frac{p(1 - p)}{nf^2(Z_p)})\sqrt{\frac{p(1 - p)}{nf^2(Z_p)}}
+\]
+Затем хотим показать, что при $k = [np] + 1, \forall x$
+\[
+q_k(x) \to \frac{1}{\sqrt{2\pi}}e^{-\frac{x^2}{2}}
+\]
+Тогда в силу леммы Шеффе
+\[
+\sqrt{n}(Z_{n,p} - Z_p)\sqrt{\frac{f^2(Z_p)}{p(1 - p)}} \dto \mathcal{N}(0, 1),
+\]
+что равносильно
+\[
+\sqrt{n}(Z_{n,p} - Z_p) \dto \mathcal{N}(0, \frac{p(1 - p)}{f^2(Z_p)})
+\]
+\end{proof}

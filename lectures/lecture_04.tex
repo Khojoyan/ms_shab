@@ -1,0 +1,244 @@
+\section{Лекция 4 -- Сравнение оценок}
+
+\begin{definition}
+Борелевская неотрицательная функция $g(x, y) \ge 0$ называется \emph{функцией потерь}.
+\end{definition}
+
+\begin{definition}
+Пусть $\hat{\theta}(x)$ -- оценка $\theta$, то $g(\hat{\theta}(x), \theta)$ -- \emph{величина потерь оценки $\hat{\theta}(x)$}.
+\end{definition}
+
+\begin{example}
+\begin{enumerate}
+    \item $g(x, y) = |x - y|$
+    \item $g(x, y) = (x - y)^2$ -- квадратичная функция потерь
+    \item $g(x, y) = ||x - y||^2, x,y \in \R^m$
+    \item $g(x, y) = <A(x - y), (x - y)>$, где A --  положительно определённая матрица
+\end{enumerate}
+\end{example}
+
+\begin{definition}
+\emph{Функцией риска оценки $\hat{\theta}(x)$}(при заданной функции потерь $g(x, y)$) называется
+$$
+R(\hat{\theta}(x), \theta) = \E_{\theta}g(\hat{\theta}(x), \theta)
+$$
+Смысл: усреднение потери.
+\end{definition}
+
+\begin{remark}
+Функция риска -- это функция от $\theta$.
+\end{remark}
+
+\subsection{Равномерный подход}
+\begin{definition}
+Оценка $\hat{\theta}(x)$ оценивает $\theta$ лучше, чем $\hat{\theta}^{*}(x)$, если $\forall \in \Theta$
+$$
+R(\hat{\theta}(x), \theta) \le R(\hat{\theta}^{*}(x), \theta)
+$$
+и $\exists \theta$, что неравенство строгое.
+\end{definition}
+
+\begin{definition}
+Оценка $\hat{\theta}(x)$ является наилучшей в классе оценок $\mathcal{K}$, если она лучше любой другой оценки из этого класса.
+\end{definition}
+
+\begin{example}
+Пусть g(x, y) -- квадратичная функция потерь. Тогда в классе всевозможных оценок $\mathcal{K}$ нет наилучшей.
+\end{example}
+\begin{proof}
+Рассмотрим константные оценки: $\forall \theta_0 \in \Theta$ рассмотрим константную оценку  $\theta^{*}(x) = \theta_0$. Тогда $R(\theta^{*}(x), \theta_0) = 0$. Значит, если существует наилучшая оценка, то $\forall \theta R(\hat{\theta}(x), \theta) = 0 \Rightarrow R(\hat{\theta}(x), \theta) \equiv 0$. Поскольку $R(\hat{\theta}(x), \theta_0) = \E_{\theta}(\hat{\theta}(x) - \theta)^2 \Rightarrow \forall \theta$ $\hat{\theta}(x) \equiv \theta.$ Противоречие.
+\end{proof}
+
+\begin{definition}
+Оценка $\hat{\theta}(x)$ называется \emph{допустимой оценкой} $\theta$, если для неё не существует оценки, которая была бы лучше в равномерном подходе.
+\end{definition}
+
+\subsection{Байесовский подход}
+\begin{definition}
+Пусть $Q$ -- распределение вероятностей на множестве $\Theta$. Оно называется \emph{априорным распределением} для параметра $\theta$.  
+\end{definition}
+Для оценки $\hat{\theta}(x)$ вводим
+$$
+R_{Q}(\hat{\theta}(x)) = \E_{Q}R(\hat{\theta}(x), \theta)
+$$
+
+\begin{definition}
+Оценка $\hat{\theta}(x)$ с условием, что $R_{Q}(\hat{\theta}(x)) = \underset{\theta^{*}(x)}{inf}R_{Q}(\theta^{*}(x))$  называется наилучшей в байесовском подходе.
+\end{definition}
+
+\begin{example}
+\begin{enumerate}
+    \item Пусть $Q$ -- дискретное распределение.\\
+    $\Theta = \{t_1, \ldots t_k \}$.\\
+    $q(t_1) \ldots q(t_k)$ -- соответствующие вероятности. Тогда
+    $$
+    R_{Q}(\hat{\theta}(x)) = \sum_{j = 1}^{k}q(t_j)R(\hat{\theta}(x), t_j)
+    $$
+    \item Пусть Q -- абсолютно непрерывное распределение с плотностью q(t). Тогда
+    $$
+    R_{Q}(\hat{\theta}(x)) = \int_{\Theta}R(\hat{\theta}(x), t) q(t)dt
+    $$
+\end{enumerate}
+\end{example}
+
+\subsection{Минимаксный подход}
+Для оценки $\hat{\theta}(x)$ введём $R_m(\hat{\theta}(x)) = \underset{\theta \in \Theta}{sup}R(\hat{\theta}(x), \theta)$. 
+\begin{definition}
+Оценка $\hat{\theta}(x)$ называется лучшей в минимаксном подходе, если
+$$
+R_m(\hat{\theta}(x)) = \underset{\theta^{*}(x)}{inf}R_m(\theta^{*}(x))
+$$
+\end{definition}
+
+%\begin{wrapfigure}[16]{r}{0.5\textwidth}
+%	\vspace{-10pt}
+%   \begin{tikzpicture}
+%  \begin{axis}[
+%	axis lines = left,
+%	xlabel = $\theta$,
+%	ylabel = {$R$},
+%	ymin = 0,
+%	ymax = 2.9,
+%	title = {Функции риска для $\hat{\theta}(\vec{X})$ и $\theta^{*}(\vec{X})$},
+%	]
+%	\addplot[domain=0:1,samples=300,color=blue,]{2.5 * e^(-(x - 0.5)^2/0.001)};
+%	\addlegendentry{$R(\theta, \hat{\theta}(\vec{X}))$};
+%	\addplot[domain=0:1,samples=300,color=red,]{2 - (2.3 * (x - 0.5))^4};
+%	\addlegendentry{$R(\theta, \theta^{*}(\vec{X}))$};
+%	\end{axis}
+%	\end{tikzpicture}
+%\end{wrapfigure}
+\begin{example}
+Здесь не хватает картинки.
+$\Theta = [0,1]$, $Q \sim U[0,1]$. Тогда $\hat{\theta_1}(x)$ лучше в минимаксном подходе, $\hat{\theta_2}(x)$ лучше в байесовском подходе, в равномерном они не сравнимы.
+% \usepackage{todonotes}  
+\end{example}
+
+\subsection{Асимптотический подход}
+Пусть есть $\hat{\theta_{1, n}}(X_1 \ldots X_n)$ и $\hat{\theta_{2, n}}(X_1 \ldots X_n)$ -- две асимптотически нормальные оценки $\theta \in \R$ с асимптотическими дисперсиями $\sigma^{2}_1(\theta)$ и $\sigma^{2}_2(\theta)$.
+\begin{definition}
+$\hat{\theta_{1, n}}(X_1 \ldots X_n)$ оценивает $\theta$ лучше, чем $\hat{\theta_{2, n}}(X_1 \ldots X_n)$, если $\forall \theta \in \Theta$ $\sigma^{2}_1(\theta) \le \sigma^{2}_2(\theta)$(для некоторого $\theta$ неравенство строгое).
+\end{definition}
+
+\begin{example}
+Пусть $X_1, \ldots X_n \sim \mathcal{N}$($\theta$, 1), $\theta \in \mathbb{R}$. Что лучше оценивает $\theta$? Выборочное среднее $\overline{x}$ или выборочная медиана $\hat{\mu}$.\\
+Согласно ЦПТ:
+$$
+\sqrt{n}(\overline{x} - \theta) \sim \mathcal{N}(0, 1)
+$$
+По теореме о выборочных квантилях
+$$
+\sqrt{n}(\overline{x} - \hat{\mu}) \sim \mathcal{N}(0, \frac{\pi}{2})
+$$
+$\Rightarrow \overline{x}$ лучше!!!
+\end{example}
+
+Теперь перед нами стоит цель построить наилучшие оценки в перечисленных подходах.
+\subsection{Неравенство Рао-Крамера и эффективные оценки}
+Пусть $\mathcal{K}$ = \{несмещенные оценки $\tau(\theta)\}$. $g(x, y) = (x - y)^2$ -- квадратичная функция потерь. Тогда 
+$$
+R(\hat{\theta}(x), \theta) = \E_\theta(\hat{\theta}(x) - \theta)^2 = |\text{Так как } \theta = \E_\theta\hat{\theta}(x)| = D_\theta\hat{\theta}(x)
+$$
+
+\begin{definition}[Обобщенная плотность]
+\begin{enumerate}
+    \item X имеет плотность $\theta(x)$ (то есть все $p_\theta$ абсолютно непрерывны), то это и есть обобщенная плотность.
+    \item Если X имеет дискретное распределение, то обобщенной плотностью называется $p_\theta(x) = p_\theta(X = x)$. 
+\end{enumerate}
+\end{definition}
+
+\begin{example}
+$X = (X_1 \ldots X_n) \sim Pois(\theta), \theta > 0$.\\
+
+$$
+P_\theta(X_1 = x_1) = \frac{\theta^{x_1}}{x_{1}!}e^{-\theta}I_{\{x_1 \in \mathbb{Z}_+\}}
+$$
+$$
+P_\theta(X_1 = x_1 \ldots X_n = x_n) = \prod\limits_{j = 1}^n P_\theta(X_j = x_j) = \prod\limits_{j = 1}^n\frac{\theta^{x_j}}{x_{j}!}e^{-\theta}I_{\{x_j \in \mathbb{Z}_+\}} = \frac{\theta^{\sum\limits_{j = 1}^n x_j}}{\prod\limits_{j = 1}^n x_j!}e^{-n\theta}I_{\{x_1 \ldots x_n \in \mathbb{Z}_+\}}
+$$
+\end{example}
+
+\subsection{Условия регулярности}
+Пусть есть обобщенная плотность $P_\theta(x)$ и выполнены:
+\begin{enumerate}
+    \item $\Theta \subseteq \R$ -- открытый интервал(может быть бесконечный).
+    \item Множество $A = \{x |$ $P_\theta(x) > 0\}$ не зависит от $\theta \Rightarrow$ \emph{равномерное распределение не годится!!!}
+    \item Для любой статистики $S(x)$ с условием, что $\E_\theta S^2(x) < +\infty$ выполнено 
+    $$
+    \frac{\partial}{\partial\theta}\E_\theta S(x) = \E_\theta(S(x)\frac{\partial}{\partial\theta}ln(p_\theta(x)))
+    $$
+    Смысл: 
+
+    $$
+    \frac{\partial}{\partial\theta}\E_\theta S(x) = \frac{\partial}{\partial\theta}\int_{A}S(x)p_\theta(x)dx = 
+    \int_{A}S(x)\frac{\partial}{\partial\theta}p_\theta(x)dx = \int_{A}S(x)\frac{\frac{\partial}{\partial\theta}p_\theta(x)}{p_\theta(x)}p_\theta(x)dx =
+    $$
+    $$
+    \int_{A}S(x)\frac{\partial}{\partial\theta}ln(p_\theta(x))p_\theta(x)dx = \E_\theta(S(x)\frac{\partial}{\partial\theta}lnp_\theta(x))
+    $$
+    \item Величина
+    $$
+    I_x(\theta) = \E_\theta(\frac{\partial}{\partial\theta}ln p_\theta(x))^2
+    $$
+    положительна и конечна для $\forall \theta$ $\in \Theta$
+\end{enumerate}
+
+\begin{definition}
+$I_x(\theta)$ -- \emph{количество информации} содержащейся в наблюдении $X$ по параметру $\theta$.
+\end{definition}
+
+\begin{definition}
+Величина $U_\theta(x) = \frac{\partial}{\partial\theta}ln(p_\theta(x))$ называется \emph{вкладом} наблюдения X. Легко видеть, что $I_x(\theta) = \E_\theta(U_\theta(x))^2$.
+\end{definition}
+
+\begin{theorem}[Неравенство Рао-Крамера.]
+Пусть выполнены условия регулярности (I - IV). Пусть $\hat\theta(x)$ -- несмещённая оценка $\tau(\theta)$, $\E_\theta(\hat\theta(x))^2 < +\infty \forall \theta$ $\in \Theta$. Тогда $\forall \theta$ $\in \Theta$
+$$
+D_\theta\hat\theta(x) \geq \frac{(\tau'(\theta))^2}{I_x(\theta)}
+$$
+\end{theorem}
+
+\begin{proof}
+Подставим $S(x) \equiv 1$ в 3-е условие регуляности:
+$$
+0 = \E_\theta\frac{\partial}{\partial\theta}ln(p_\theta(x)) = \E_\theta U_\theta(x)
+$$
+Подставим S(x) = $\hat\theta(x)$ в 3-е условие регулярности:
+$$
+\tau'(\theta) = \E_\theta\hat\theta(x)U_\theta(x) = |\E_\theta U_\theta(x) = 0| = \E_\theta(\hat\theta(x) - \tau(\theta))U_\theta(x)
+$$
+По неравенству Коши-Буняковского:
+$$
+(\tau'(\theta))^2 = (\E_\theta(\hat\theta(x) - \tau(\theta))U_\theta(x))^2 \leq \E_\theta(\hat\theta(x) - \tau(\theta))^2 \E_\theta U^2_\theta(x) = |\tau(\theta) = \E_\theta(\hat\theta(x)| = D_\theta\hat\theta(x)I_x(\theta)
+$$
+\end{proof}
+\begin{remark}
+Заметим, что равенство в неравенстве Рао-Крамера достигается тогда и только тогда, когда $(\hat\theta(x) - \tau(\theta))$ и $U_\theta(x)$ линейно зависимы.(см. переход по неравенству Коши-Буняковского выше)
+\end{remark}
+
+\begin{definition}
+Если для $\hat\theta(x)$ достигается равенство в неравенстве Рао-Крамера, то оценка $\hat\theta(x)$ называется эффективной оценкой $\tau(\theta)$ $\Rightarrow$ наилучшей в равномерном подходе в классе несмещенных оценок $\tau(\theta)$ c квадратичной функцией потерь. 
+\end{definition}
+
+\begin{consequence}[Критерий эффективности]
+Оценка $\hat\theta(x)$ является эффективной оценкой $\tau(\theta)$ $\Leftrightarrow$ $\forall \theta \in$ $\Theta$ $\hat\theta(x) - \tau(\theta) = c(\theta)U_\theta(x)$, где $c(\theta) = \frac{\tau'(\theta)}{I_X(\theta)}$
+\end{consequence}
+
+\begin{proof}
+Как мы уже заметили, равенство в неравенстве Рао-Крамера достигается $\Leftrightarrow$ $(\hat\theta(x) - \tau(\theta))$ и $U_\theta(x)$ линейно зависимы, т.е. $(\hat\theta(x) - \tau(\theta)) = c(\theta)U_\theta(x)$. Вопрос чему равно с$(\theta)$. Умножим обе части равенства на $U_\theta(x)$ и возьмём $\E_\theta$:
+$$
+\tau'(\theta) = \E_\theta(\hat\theta(x) - \tau(\theta))U_\theta(x) = c(\theta)\E_\theta U^2_\theta(x) = c(\theta)I_X(\theta) \Rightarrow c(\theta) = \frac{\tau'(\theta)}{I_X(\theta)}
+$$
+\end{proof}
+
+\begin{example}
+$X_1 \ldots X_n \sim Pois(\theta), \theta > 0.$\\
+Найти для каких функций $\tau(\theta)$ существуют эффективные оценки. Найти $I_X(\theta)$.
+\end{example}
+$$
+P_\theta(X_1 \ldots X_n) = \frac{\theta^{\sum\limits_{i = 1}^n x_i}}{\prod\limits_{i = 1}^n x_i!}e^{-n\theta}I_{\{x_1 \ldots x_n \in \mathbb{Z}_+\}}
+$$
+$$
+\frac{\partial}{\partial\theta}lnp_\theta(x_1 \ldots x_n) = \frac{\partial}{\partial\theta}(\sum x_i ln(\theta) - n\theta) = \frac{\Ex_i}{\theta} - n = \frac{n}{\theta}(overline{X} - \theta)
+$$
+Отсюда легко видеть, что $\hat\theta(x) = \overline{X}, \tau{\theta} = \theta, c^{-1}(\theta) = \frac{n}{\theta} = I_X(\theta)$ $\Rightarrow$ $\overline{X}$ -- эффективная оценка $\theta$ и $I_X(\theta) = \frac{n}{\theta}$. 
